@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edge Tutor — An AI tutor that works without internet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#0C1A2E;
+  --night2:#122744;
+  --panel:#16304F;
+  --panel2:#1B3A5E;
+  --line:#2C5178;
+  --line-soft:#21415F;
+  --ink:#F0F6FC;
+  --dim:#A8BFD6;
+  --faint:#6F8CA9;
+
+  --coral:#FF7E68;
+  --amber:#FFC348;
+  --mint:#5FE3B0;
+  --violet:#B492FF;
+  --sky:#57C9F6;
+  --pink:#FF9ECF;
+
+  --skin:#F3C9A5;
+  --skin-sh:#E0AE86;
+  --hair:#3A2A3F;
+  --hair2:#503A56;
+
+  --display:'Baloo 2', cursive;
+  --body:'Nunito', sans-serif;
+  --mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    radial-gradient(1100px 600px at 12% -5%, rgba(180,146,255,.20), transparent 60%),
+    radial-gradient(900px 500px at 95% 8%, rgba(87,201,246,.16), transparent 60%),
+    radial-gradient(900px 700px at 50% 108%, rgba(95,227,176,.12), transparent 60%),
+    var(--night);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:17px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--amber);color:var(--night)}
+a{color:var(--sky);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px;border-radius:4px}
+
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+@media(max-width:600px){.wrap{padding:0 18px}}
+
+/* ---------------- nav ---------------- */
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(12,26,46,.88);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line-soft);
+}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 28px;max-width:1080px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:.01em}
+.brand .spark{width:26px;height:26px;border-radius:9px;background:linear-gradient(135deg,var(--amber),var(--coral));display:grid;place-items:center;font-size:14px}
+.nav nav{display:flex;gap:8px;flex-wrap:wrap}
+.nav nav a{font-size:14px;font-weight:700;color:var(--dim);padding:6px 11px;border-radius:999px}
+.nav nav a:hover{color:var(--ink);background:var(--panel);text-decoration:none}
+@media(max-width:860px){.nav nav{display:none}}
+
+/* ---------------- sections ---------------- */
+section{padding:84px 0}
+section + section{border-top:1px solid var(--line-soft)}
+h1{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(38px,6.6vw,66px);line-height:1.04;margin:0 0 18px;
+}
+h2{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(28px,4.2vw,40px);line-height:1.15;margin:0 0 14px;
+}
+h3{font-family:var(--display);font-weight:700;font-size:20px;margin:0 0 6px}
+p{margin:0 0 16px;max-width:66ch}
+.big{font-size:19px;color:var(--dim)}
+.eyebrow{
+  display:inline-block;font-family:var(--mono);font-size:12px;
+  color:var(--night);background:var(--amber);
+  padding:4px 11px;border-radius:999px;margin-bottom:14px;font-weight:500;
+}
+.eyebrow.c{background:var(--coral)}
+.eyebrow.m{background:var(--mint)}
+.eyebrow.v{background:var(--violet)}
+.eyebrow.s{background:var(--sky)}
+.eyebrow.p{background:var(--pink)}
+
+/* ---------------- guide character ---------------- */
+.guide{
+  display:flex;align-items:flex-end;gap:18px;margin-bottom:30px;
+}
+.guide .girl{width:118px;height:auto;flex:none}
+@media(max-width:600px){.guide .girl{width:92px}.guide{gap:12px}}
+.bubble{
+  position:relative;background:var(--panel);
+  border:2px solid var(--line);
+  border-radius:20px 20px 20px 6px;
+  padding:14px 20px;font-size:17px;font-weight:600;color:var(--ink);
+  max-width:56ch;margin-bottom:10px;
+}
+.bubble:after{
+  content:"";position:absolute;left:-9px;bottom:10px;
+  width:14px;height:14px;background:var(--panel);
+  border-left:2px solid var(--line);border-bottom:2px solid var(--line);
+  transform:rotate(45deg);border-radius:0 0 0 4px;
+}
+.bubble.a{border-color:var(--amber)}   .bubble.a:after{border-color:var(--amber)}
+.bubble.c{border-color:var(--coral)}   .bubble.c:after{border-color:var(--coral)}
+.bubble.m{border-color:var(--mint)}    .bubble.m:after{border-color:var(--mint)}
+.bubble.v{border-color:var(--violet)}  .bubble.v:after{border-color:var(--violet)}
+.bubble.s{border-color:var(--sky)}     .bubble.s:after{border-color:var(--sky)}
+.bubble.p{border-color:var(--pink)}    .bubble.p:after{border-color:var(--pink)}
+
+.g-bob{animation:bob 3.4s ease-in-out infinite;transform-origin:center bottom}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.g-arm{transform-origin:78px 96px;animation:wave 2.4s ease-in-out infinite}
+@keyframes wave{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-16deg)}}
+.g-arm.point{animation:poke 2s ease-in-out infinite}
+@keyframes poke{0%,100%{transform:rotate(0deg) translateX(0)}50%{transform:rotate(-6deg) translateX(4px)}}
+.g-arm.up{animation:lift 3s ease-in-out infinite}
+@keyframes lift{0%,100%{transform:rotate(-26deg)}50%{transform:rotate(-40deg)}}
+.g-bag{animation:sway 3.4s ease-in-out infinite;transform-origin:52px 92px}
+@keyframes sway{0%,100%{transform:rotate(0deg)}50%{transform:rotate(3deg)}}
+.g-eye{animation:blink 5.5s infinite}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+.g-spark{animation:twinkle 2.6s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
+
+/* ---------------- hero ---------------- */
+.hero{padding-top:56px;padding-bottom:70px}
+.hero h1 span.hl{
+  background:linear-gradient(180deg,transparent 62%,rgba(255,195,72,.42) 62%);
+}
+.hero-sub{font-size:21px;color:var(--dim);max-width:52ch;margin-bottom:34px}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:44px}
+.chip{
+  border:2px solid var(--line);border-radius:999px;padding:7px 16px;
+  font-weight:700;font-size:14.5px;color:var(--ink);background:var(--night2);
+  display:flex;align-items:center;gap:8px;
+}
+.chip i{width:9px;height:9px;border-radius:50%;display:block}
+
+/* ---------------- cards ---------------- */
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:880px){.grid4{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr}}
+@media(max-width:560px){.grid4,.grid2{grid-template-columns:1fr}}
+.card{
+  background:var(--night2);border:2px solid var(--line-soft);
+  border-radius:18px;padding:22px;
+}
+.card .ic{font-size:30px;line-height:1;margin-bottom:12px;display:block}
+.card p{font-size:15.5px;color:var(--dim);margin:0}
+.card.a{border-color:rgba(255,195,72,.5)}
+.card.c{border-color:rgba(255,126,104,.5)}
+.card.m{border-color:rgba(95,227,176,.5)}
+.card.v{border-color:rgba(180,146,255,.5)}
+.card.s{border-color:rgba(87,201,246,.5)}
+
+/* ---------------- figure frame ---------------- */
+figure{margin:0 0 10px}
+.fig{
+  background:var(--night2);border:2px solid var(--line-soft);
+  border-radius:20px;padding:22px;overflow-x:auto;
+}
+.fig svg{width:100%;height:auto;display:block;min-width:520px}
+figcaption{
+  font-size:14.5px;color:var(--faint);margin-top:12px;text-align:center;
+}
+svg text{font-family:var(--body);fill:var(--ink);font-weight:700}
+svg text.sub{fill:var(--dim);font-weight:600}
+svg text.tiny{fill:var(--faint);font-weight:600}
+.flow{stroke:var(--line);stroke-width:2.5;fill:none;stroke-linecap:round}
+.flow.dash{stroke-dasharray:7 7;animation:march 1.4s linear infinite}
+@keyframes march{to{stroke-dashoffset:-28}}
+.pulse{animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+
+/* ---------------- knobs ---------------- */
+.knobs{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:700px){.knobs{grid-template-columns:1fr}}
+.knob-box{background:var(--night2);border:2px solid var(--line-soft);border-radius:20px;overflow:hidden}
+.knob-box header{position:static;background:none;backdrop-filter:none;border:none}
+.kb-head{padding:16px 22px;font-family:var(--display);font-weight:700;font-size:19px;display:flex;align-items:center;gap:10px;border-bottom:2px solid var(--line-soft)}
+.knob{padding:14px 22px;border-bottom:1px solid var(--line-soft)}
+.knob:last-child{border-bottom:none}
+.knob .kname{font-weight:700;font-size:16px;margin-bottom:2px}
+.knob .kplain{font-size:14.5px;color:var(--dim)}
+.slider{height:7px;border-radius:99px;background:var(--panel);margin-top:9px;position:relative}
+.slider i{position:absolute;top:-4px;width:15px;height:15px;border-radius:50%;box-shadow:0 0 0 4px rgba(12,26,46,.6)}
+
+/* ---------------- measures ---------------- */
+.meter{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px dashed var(--line-soft);font-size:15px;color:var(--dim)}
+.meter:first-of-type{border-top:none}
+.meter b{color:var(--ink);font-weight:700}
+
+/* ---------------- footer ---------------- */
+footer{border-top:1px solid var(--line-soft);padding:54px 0 70px;text-align:center}
+footer .f-girl{width:120px;margin:0 auto 14px;display:block}
+.f-line{font-family:var(--mono);font-size:13px;color:var(--faint);margin-top:18px}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="brand"><span class="spark">✦</span> Edge Tutor</div>
+    <nav>
+      <a href="#idea">The idea</a>
+      <a href="#why">Why offline</a>
+      <a href="#problem">The problem</a>
+      <a href="#approach">Our approach</a>
+      <a href="#attention">The shortcut</a>
+      <a href="#tune">What we tune</a>
+      <a href="#measure">What we measure</a>
+      <a href="#loop">How we test</a>
+      <a href="#whole">The whole picture</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ========== HERO ========== -->
+<section class="hero" id="idea">
+  <div class="guide">
+    <svg class="girl" viewBox="0 0 150 215" role="img" aria-label="Maya, a cheerful student with a backpack, waving hello." data-pose=""></svg>
+    <div class="bubble a">Hi! I'm Maya. Let me walk you through our project — no technical background needed.</div>
+  </div>
+
+  <h1>An AI tutor that works <span class="hl">without internet</span>.</h1>
+  <p class="hero-sub">A student asks a question. A small AI model answers — running entirely on a cheap little computer sitting right there on the desk. No Wi‑Fi. No cloud. No monthly bill.</p>
+
+  <div class="chips">
+    <span class="chip"><i style="background:var(--mint)"></i>Works offline</span>
+    <span class="chip"><i style="background:var(--sky)"></i>Private by design</span>
+    <span class="chip"><i style="background:var(--amber)"></i>Low cost</span>
+    <span class="chip"><i style="background:var(--coral)"></i>Runs on small hardware</span>
+  </div>
+
+  <figure>
+    <div class="fig">
+      <svg viewBox="0 0 900 250" role="img" aria-label="A student asks a question, a small device answers on the spot, with no connection to the cloud.">
+        <!-- student -->
+        <rect x="20" y="70" width="230" height="110" rx="20" fill="var(--panel)" stroke="var(--sky)" stroke-width="2.5"/>
+        <text x="50" y="108" font-size="30">🙋‍♀️</text>
+        <text x="95" y="107" font-size="17">Student</text>
+        <text x="50" y="145" class="sub" font-size="14.5">“Explain Newton’s</text>
+        <text x="50" y="166" class="sub" font-size="14.5">second law.”</text>
+
+        <path class="flow dash" d="M255 125 H 330" stroke="var(--sky)"/>
+        <polygon points="330,118 346,125 330,132" fill="var(--sky)"/>
+
+        <!-- device -->
+        <rect x="350" y="52" width="210" height="146" rx="22" fill="var(--panel2)" stroke="var(--amber)" stroke-width="3"/>
+        <text x="392" y="98" font-size="30">🧠</text>
+        <text x="437" y="97" font-size="17">Edge Tutor</text>
+        <text x="380" y="132" class="sub" font-size="14.5">A small AI model</text>
+        <text x="380" y="154" class="sub" font-size="14.5">on a small chip</text>
+        <text x="380" y="180" class="tiny" font-size="13">right here on the desk</text>
+
+        <path class="flow dash" d="M565 125 H 640" stroke="var(--mint)"/>
+        <polygon points="640,118 656,125 640,132" fill="var(--mint)"/>
+
+        <!-- answer -->
+        <rect x="660" y="70" width="222" height="110" rx="20" fill="var(--panel)" stroke="var(--mint)" stroke-width="2.5"/>
+        <text x="690" y="108" font-size="30">💬</text>
+        <text x="735" y="107" font-size="17">Answer</text>
+        <text x="690" y="145" class="sub" font-size="14.5">Explained in seconds,</text>
+        <text x="690" y="166" class="sub" font-size="14.5">on the device</text>
+
+        <!-- crossed-out cloud -->
+        <g class="pulse">
+          <text x="425" y="32" font-size="22">☁️</text>
+          <line x1="418" y1="34" x2="452" y2="8" stroke="var(--coral)" stroke-width="3" stroke-linecap="round"/>
+          <text x="470" y="28" class="tiny" font-size="13.5">no cloud needed</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption>The whole conversation stays on the device.</figcaption>
+  </figure>
+</section>
+
+<!-- ========== WHY ========== -->
+<section id="why">
+  <div class="guide">
+    <svg class="girl" viewBox="0 0 150 215" role="img" aria-label="Maya pointing at the reasons for running offline." data-pose="point"></svg>
+    <div class="bubble m">Most AI lives in a data centre far away. Here's why we brought it home.</div>
+  </div>
+
+  <span class="eyebrow m">Why offline</span>
+  <h2>Four good reasons</h2>
+  <p class="big">Sending every question to a server works fine — until the connection drops, the bill arrives, or a student would rather nobody saw what they got wrong.</p>
+
+  <div class="grid4">
+    <div class="card m"><span class="ic">📴</span><h3>Works offline</h3><p>On a bus, in a village with no signal, during a power cut — the tutor still answers.</p></div>
+    <div class="card s"><span class="ic">🔒</span><h3>Stays private</h3><p>Questions and mistakes never leave the desk. Nothing is uploaded anywhere.</p></div>
+    <div class="card a"><span class="ic">💸</span><h3>Costs little</h3><p>No fee per question and no servers to keep running for every classroom.</p></div>
+    <div class="card c"><span class="ic">🔌</span><h3>Fits small hardware</h3><p>Designed for the modest, affordable chips schools can actually buy in bulk.</p></div>
+  </div>
+</section>
+
+<!-- ========== PROBLEM ========== -->
+<section id="problem">
+  <div class="guide">
+    <svg class="girl" viewBox="0 0 150 215" role="img" aria-label="Maya thinking about the trade-off." data-pose="think"></svg>
+    <div class="bubble c">Here's the catch: you can't have everything at once.</div>
+  </div>
+
+  <span class="eyebrow c">The problem</span>
+  <h2>Three things pulling against each other</h2>
+  <p class="big">Make the tutor faster and it needs more memory. Save memory and it slows down. Fix both with a better chip and the price goes up. Push any one lever and the other two react.</p>
+
+  <figure>
+    <div class="fig">
+      <svg viewBox="0 0 900 330" role="img" aria-label="Speed, memory and price pull against each other; co-design balances all three.">
+        <path d="M450 40 L 800 280 L 100 280 Z" fill="none" stroke="var(--line)" stroke-width="2.5" stroke-linejoin="round"/>
+
+        <circle cx="450" cy="40" r="34" fill="var(--panel)" stroke="var(--sky)" stroke-width="3"/>
+        <text x="450" y="50" text-anchor="middle" font-size="26">⚡</text>
+        <text x="450" y="-2" text-anchor="middle" font-size="17" dy="0">Speed</text>
+        <text x="450" y="18" text-anchor="middle" class="tiny" font-size="13">how fast it answers</text>
+
+        <circle cx="100" cy="280" r="34" fill="var(--panel)" stroke="var(--violet)" stroke-width="3"/>
+        <text x="100" y="290" text-anchor="middle" font-size="26">🗄️</text>
+        <text x="100" y="336" text-anchor="middle" font-size="17">Memory</text>
+
+        <circle cx="800" cy="280" r="34" fill="var(--panel)" stroke="var(--amber)" stroke-width="3"/>
+        <text x="800" y="290" text-anchor="middle" font-size="26">💰</text>
+        <text x="800" y="336" text-anchor="middle" font-size="17">Price</text>
+
+        <circle cx="450" cy="200" r="58" fill="var(--panel2)" stroke="var(--coral)" stroke-width="3"/>
+        <text x="450" y="196" text-anchor="middle" font-size="18">CHIA</text>
+        <text x="450" y="218" text-anchor="middle" class="tiny" font-size="13">finds the balance</text>
+
+        <path class="flow dash" d="M450 78 V 138" stroke="var(--sky)"/>
+        <path class="flow dash" d="M766 262 L 507 218" stroke="var(--amber)"/>
+        <path class="flow dash" d="M134 262 L 393 218" stroke="var(--violet)"/>
+      </svg>
+    </div>
+    <figcaption>CHIA is the tool we use to search for the best compromise, instead of guessing.</figcaption>
+  </figure>
+</section>
+
+<!-- ========== APPROACH ========== -->
+<section id="approach">
+  <div class="guide">
+    <svg class="girl" viewBox="0 0 150 215" role="img" aria-label="Maya presenting the two sides of the project." data-pose="present"></svg>
+    <div class="bubble v">So we design the program and the chip together — not one after the other.</div>
+  </div>
+
+  <span class="eyebrow v">Our approach</span>
+  <h2>Two sides, designed as one</h2>
+  <p class="big">Normally someone writes the software, then someone else picks the hardware and hopes for the best. We change both at the same time and see which combinations actually work well together.</p>
+
+  <figure>
+    <div class="fig">
+      <svg viewBox="0 0 900 300" role="img" aria-label="The tutor program and a stand-in for the chip both feed into CHIA, which runs experiments and compares results.">
+        <rect x="40" y="20" width="330" height="96" rx="20" fill="var(--panel)" stroke="var(--violet)" stroke-width="2.5"/>
+        <text x="72" y="60" font-size="26">💻</text>
+        <text x="112" y="59" font-size="18">The program</text>
+        <text x="72" y="92" class="sub" font-size="14.5">what the tutor has to compute</text>
+
+        <rect x="530" y="20" width="330" height="96" rx="20" fill="var(--panel)" stroke="var(--sky)" stroke-width="2.5"/>
+        <text x="562" y="60" font-size="26">🔧</text>
+        <text x="602" y="59" font-size="18">The chip</text>
+        <text x="562" y="92" class="sub" font-size="14.5">a simulated processor to run it on</text>
+
+        <path class="flow" d="M205 120 C 205 170, 380 160, 405 178" stroke="var(--violet)"/>
+        <path class="flow" d="M695 120 C 695 170, 520 160, 495 178" stroke="var(--sky)"/>
+
+        <rect x="360" y="180" width="180" height="62" rx="18" fill="var(--panel2)" stroke="var(--coral)" stroke-width="3"/>
+        <text x="450" y="210" text-anchor="middle" font-size="18">CHIA</text>
+        <text x="450" y="231" text-anchor="middle" class="tiny" font-size="12.5">runs every combination</text>
+
+        <path class="flow dash" d="M450 246 V 272" stroke="var(--mint)"/>
+        <polygon points="443,272 450,288 457,272" fill="var(--mint)"/>
+        <text x="482" y="286" class="sub" font-size="15">Compare the results</text>
+      </svg>
+    </div>
+    <figcaption>One tool drives both sides, so every result is directly comparable.</figcaption>
+  </figure>
+</section>
+
+<!-- ========== ATTENTION ========== -->
+<section id="attention">
+  <div class="guide">
+    <svg class="girl" viewBox="0 0 150 215" role="img" aria-label="Maya pointing down at the simplification." data-pose="point"></svg>
+    <div class="bubble s">Simulating a whole AI model chip-by-chip would take forever. So we test the part that matters most.</div>
+  </div>
+
+  <span class="eyebrow s">The shortcut</span>
+  <h2>Test the busiest part, not the whole thing</h2>
+  <p class="big">Inside every AI model there's a step called <b>attention</b> — where the model decides which earlier words matter for the next one. It's the step that eats most of the time and most of the memory. If we get attention right, we've got the hard part right.</p>
+
+  <figure>
+    <div class="fig">
+      <svg viewBox="0 0 760 330" role="img" aria-label="Narrowing down from a whole AI model to the attention step, tested as a small stand-in program.">
+        <rect x="150" y="14" width="460" height="56" rx="16" fill="var(--panel)" stroke="var(--line)" stroke-width="2.5"/>
+        <text x="380" y="48" text-anchor="middle" font-size="17">A whole AI model</text>
+        <text x="632" y="48" class="tiny" font-size="13">far too slow to simulate</text>
+        <path class="flow" d="M380 70 V 92" stroke="var(--line)"/>
+
+        <rect x="200" y="92" width="360" height="56" rx="16" fill="var(--panel)" stroke="var(--line)" stroke-width="2.5"/>
+        <text x="380" y="126" text-anchor="middle" font-size="17">Its main engine</text>
+        <path class="flow" d="M380 148 V 170" stroke="var(--line)"/>
+
+        <rect x="250" y="170" width="260" height="56" rx="16" fill="var(--panel)" stroke="var(--sky)" stroke-width="2.5"/>
+        <text x="380" y="204" text-anchor="middle" font-size="17">The attention step</text>
+        <path class="flow dash" d="M380 226 V 248" stroke="var(--amber)"/>
+        <polygon points="373,248 380,262 387,248" fill="var(--amber)"/>
+
+        <rect x="110" y="258" width="540" height="62" rx="18" fill="var(--panel2)" stroke="var(--amber)" stroke-width="3"/>
+        <text x="380" y="288" text-anchor="middle" font-size="17">A small stand-in program that does exactly that</text>
+        <text x="380" y="309" text-anchor="middle" class="sub" font-size="14">…plus a compressed memory of the conversation so far</text>
+      </svg>
+    </div>
+    <figcaption>Same workload, small enough to run thousands of times.</figcaption>
+  </figure>
+</section>
+
+<!-- ========== TUNE ========== -->
+<section id="tune">
+  <div class="guide">
+    <svg class="girl" viewBox="0 0 150 215" role="img" aria-label="Maya holding up the set of dials we adjust." data-pose="up"></svg>
+    <div class="bubble p">These are the dials. We turn them in every sensible combination.</div>
+  </div>
+
+  <span class="eyebrow p">What we tune</span>
+  <h2>The dials we turn</h2>
+  <p class="big">Five on the software side, five on the hardware side. Each one shifts the balance between speed, memory and price.</p>
+
+  <div class="knobs">
+    <div class="knob-box">
+      <div class="kb-head"><span>💻</span> The program</div>
+      <div class="knob"><div class="kname">Memory format</div><div class="kplain">How tightly we compress what the model remembers.</div><div class="slider"><i style="left:22%;background:var(--violet)"></i></div></div>
+      <div class="knob"><div class="kname">Conversation length</div><div class="kplain">How much of the chat the tutor keeps in mind.</div><div class="slider"><i style="left:58%;background:var(--violet)"></i></div></div>
+      <div class="knob"><div class="kname">Number of “readers”</div><div class="kplain">How many things the model looks at in parallel.</div><div class="slider"><i style="left:40%;background:var(--violet)"></i></div></div>
+      <div class="knob"><div class="kname">Detail per reader</div><div class="kplain">How much detail each of those looks holds.</div><div class="slider"><i style="left:70%;background:var(--violet)"></i></div></div>
+      <div class="knob"><div class="kname">Parallel workers</div><div class="kplain">How much of the work is split up and done at once.</div><div class="slider"><i style="left:33%;background:var(--violet)"></i></div></div>
+    </div>
+
+    <div class="knob-box">
+      <div class="kb-head"><span>🔧</span> The chip</div>
+      <div class="knob"><div class="kname">Number of cores</div><div class="kplain">How many jobs the processor can handle at once.</div><div class="slider"><i style="left:28%;background:var(--sky)"></i></div></div>
+      <div class="knob"><div class="kname">Clock speed</div><div class="kplain">How quickly it works through each step.</div><div class="slider"><i style="left:62%;background:var(--sky)"></i></div></div>
+      <div class="knob"><div class="kname">Fast memory size</div><div class="kplain">The small scratchpad right next to the processor.</div><div class="slider"><i style="left:47%;background:var(--sky)"></i></div></div>
+      <div class="knob"><div class="kname">Scratchpad layout</div><div class="kplain">How that scratchpad is organised internally.</div><div class="slider"><i style="left:36%;background:var(--sky)"></i></div></div>
+      <div class="knob"><div class="kname">Main memory</div><div class="kplain">The bigger, slower storage it falls back on.</div><div class="slider"><i style="left:55%;background:var(--sky)"></i></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== MEASURE ========== -->
+<section id="measure">
+  <div class="guide">
+    <svg class="girl" viewBox="0 0 150 215" role="img" aria-label="Maya presenting the results we collect." data-pose="present"></svg>
+    <div class="bubble a">For every setting we turn, we write down three kinds of result.</div>
+  </div>
+
+  <span class="eyebrow a">What we measure</span>
+  <h2>Three scorecards</h2>
+
+  <div class="grid3">
+    <div class="card s">
+      <span class="ic">⚡</span><h3>Speed</h3>
+      <div class="meter"><b>Cycles</b> — total work done</div>
+      <div class="meter"><b>Instructions</b> — steps taken</div>
+      <div class="meter"><b>Efficiency</b> — work per step</div>
+      <div class="meter"><b>Time</b> — how long it would really take</div>
+    </div>
+    <div class="card a">
+      <span class="ic">🗄️</span><h3>Memory behaviour</h3>
+      <div class="meter"><b>Near misses</b> — times the scratchpad was empty</div>
+      <div class="meter"><b>Far misses</b> — times it had to reach further out</div>
+      <div class="meter" style="color:var(--faint)">Fewer misses means a faster, cooler chip.</div>
+    </div>
+    <div class="card m">
+      <span class="ic">✅</span><h3>Correctness</h3>
+      <div class="meter"><b>Checksum</b> — the answer is verified</div>
+      <div class="meter"><b>Pass / fail</b> — a fast run that gets it wrong doesn't count</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== LOOP ========== -->
+<section id="loop">
+  <div class="guide">
+    <svg class="girl" viewBox="0 0 150 215" role="img" aria-label="Maya pointing at the testing loop." data-pose="point"></svg>
+    <div class="bubble v">Every single experiment goes around this loop.</div>
+  </div>
+
+  <span class="eyebrow v">How we test</span>
+  <h2>One trip around the loop</h2>
+  <p class="big">Pick a setting. Check it makes sense. Run it on both sides. Collect the numbers. Compare it against everything tried before — then pick the next setting.</p>
+
+  <figure>
+    <div class="fig">
+      <svg viewBox="0 0 900 400" role="img" aria-label="Choose a setting, check it, run it on both the program and the simulated chip, then score and compare.">
+        <rect x="350" y="12" width="200" height="60" rx="18" fill="var(--panel)" stroke="var(--amber)" stroke-width="2.5"/>
+        <text x="450" y="40" text-anchor="middle" font-size="16">1 · Pick a setting</text>
+        <text x="450" y="60" text-anchor="middle" class="tiny" font-size="12.5">one combination of dials</text>
+        <path class="flow" d="M450 72 V 100" stroke="var(--line)"/>
+
+        <rect x="350" y="100" width="200" height="60" rx="18" fill="var(--panel)" stroke="var(--amber)" stroke-width="2.5"/>
+        <text x="450" y="128" text-anchor="middle" font-size="16">2 · Sanity check</text>
+        <text x="450" y="148" text-anchor="middle" class="tiny" font-size="12.5">is it even buildable?</text>
+
+        <path class="flow" d="M450 160 C 450 200, 260 190, 230 212" stroke="var(--violet)"/>
+        <path class="flow" d="M450 160 C 450 200, 640 190, 670 212" stroke="var(--sky)"/>
+
+        <rect x="110" y="212" width="240" height="62" rx="18" fill="var(--panel)" stroke="var(--violet)" stroke-width="2.5"/>
+        <text x="230" y="240" text-anchor="middle" font-size="16">3a · Run the program</text>
+        <text x="230" y="261" text-anchor="middle" class="tiny" font-size="12.5">does the maths come out right?</text>
+
+        <rect x="550" y="212" width="240" height="62" rx="18" fill="var(--panel)" stroke="var(--sky)" stroke-width="2.5"/>
+        <text x="670" y="240" text-anchor="middle" font-size="16">3b · Simulate the chip</text>
+        <text x="670" y="261" text-anchor="middle" class="tiny" font-size="12.5">how would real hardware cope?</text>
+
+        <path class="flow dash" d="M230 274 C 230 310, 400 306, 420 322" stroke="var(--violet)"/>
+        <path class="flow dash" d="M670 274 C 670 310, 500 306, 480 322" stroke="var(--sky)"/>
+
+        <rect x="340" y="322" width="220" height="62" rx="18" fill="var(--panel2)" stroke="var(--mint)" stroke-width="3"/>
+        <text x="450" y="350" text-anchor="middle" font-size="16">4 · Score &amp; compare</text>
+        <text x="450" y="371" text-anchor="middle" class="tiny" font-size="12.5">better or worse than before?</text>
+
+        <path class="flow dash" d="M560 353 C 830 353, 860 60, 560 42" stroke="var(--mint)"/>
+        <polygon points="566,35 552,42 566,49" fill="var(--mint)"/>
+        <text x="806" y="200" text-anchor="middle" class="sub" font-size="14">repeat</text>
+      </svg>
+    </div>
+    <figcaption>The loop runs automatically, so hundreds of combinations can be explored.</figcaption>
+  </figure>
+</section>
+
+<!-- ========== WHOLE PICTURE ========== -->
+<section id="whole">
+  <div class="guide">
+    <svg class="girl" viewBox="0 0 150 215" role="img" aria-label="Maya presenting the complete picture." data-pose="present"></svg>
+    <div class="bubble c">And here's everything, on one page.</div>
+  </div>
+
+  <span class="eyebrow c">The whole picture</span>
+  <h2>How it all fits together</h2>
+  <p class="big">From a student's question at the top, down through the two things we design, into the testing loop, and back out as the best setup to build.</p>
+
+  <figure>
+    <div class="fig">
+      <svg viewBox="0 0 980 720" role="img" aria-label="Complete overview: the student's need leads to a tutor design with software and hardware dials, which CHIA runs through a program check and a chip simulation, producing speed, memory and correctness scores that feed back into the search and finally produce the recommended build.">
+        <!-- ===== band 1: the need ===== -->
+        <rect x="24" y="16" width="932" height="96" rx="22" fill="var(--panel)" stroke="var(--sky)" stroke-width="2.5"/>
+        <text x="60" y="58" font-size="28">🙋‍♀️</text>
+        <text x="104" y="57" font-size="18">A student needs help — with no internet, no budget, no privacy risk</text>
+        <text x="104" y="86" class="sub" font-size="15">so the tutor must run on a small, cheap device sitting right there</text>
+        <text x="880" y="70" font-size="30">🧠</text>
+
+        <path class="flow dash" d="M490 112 V 142" stroke="var(--sky)"/>
+        <polygon points="483,142 490,156 497,142" fill="var(--sky)"/>
+
+        <!-- ===== band 2: two sides ===== -->
+        <rect x="24" y="160" width="452" height="164" rx="22" fill="var(--night2)" stroke="var(--violet)" stroke-width="2.5"/>
+        <text x="56" y="198" font-size="22">💻</text>
+        <text x="92" y="197" font-size="18">The program</text>
+        <text x="56" y="228" class="sub" font-size="14.5">the attention step, done as a small stand-in</text>
+        <text x="56" y="260" class="tiny" font-size="13.5">dials: memory format · conversation length</text>
+        <text x="56" y="282" class="tiny" font-size="13.5">readers · detail per reader · parallel workers</text>
+        <rect x="56" y="296" width="390" height="7" rx="4" fill="var(--panel)"/>
+        <circle cx="180" cy="300" r="7" fill="var(--violet)"/>
+
+        <rect x="504" y="160" width="452" height="164" rx="22" fill="var(--night2)" stroke="var(--sky)" stroke-width="2.5"/>
+        <text x="536" y="198" font-size="22">🔧</text>
+        <text x="572" y="197" font-size="18">The chip</text>
+        <text x="536" y="228" class="sub" font-size="14.5">a simulated processor, not a real one yet</text>
+        <text x="536" y="260" class="tiny" font-size="13.5">dials: cores · clock speed · fast memory</text>
+        <text x="536" y="282" class="tiny" font-size="13.5">scratchpad layout · main memory</text>
+        <rect x="536" y="296" width="390" height="7" rx="4" fill="var(--panel)"/>
+        <circle cx="720" cy="300" r="7" fill="var(--sky)"/>
+
+        <path class="flow" d="M250 324 C 250 366, 400 360, 428 378" stroke="var(--violet)"/>
+        <path class="flow" d="M730 324 C 730 366, 580 360, 552 378" stroke="var(--sky)"/>
+
+        <!-- ===== band 3: CHIA ===== -->
+        <rect x="360" y="376" width="260" height="76" rx="22" fill="var(--panel2)" stroke="var(--coral)" stroke-width="3"/>
+        <text x="490" y="410" text-anchor="middle" font-size="19">CHIA</text>
+        <text x="490" y="434" text-anchor="middle" class="tiny" font-size="13">pairs them up and runs the test</text>
+
+        <path class="flow" d="M420 452 C 380 490, 300 486, 268 504" stroke="var(--coral)"/>
+        <path class="flow" d="M560 452 C 600 490, 680 486, 712 504" stroke="var(--coral)"/>
+
+        <!-- ===== band 4: two runs ===== -->
+        <rect x="70" y="504" width="396" height="72" rx="20" fill="var(--panel)" stroke="var(--violet)" stroke-width="2.5"/>
+        <text x="100" y="540" font-size="20">🧮</text>
+        <text x="134" y="539" font-size="16.5">Run the program — is the answer correct?</text>
+        <text x="134" y="562" class="tiny" font-size="13">checksum · pass or fail</text>
+
+        <rect x="514" y="504" width="396" height="72" rx="20" fill="var(--panel)" stroke="var(--sky)" stroke-width="2.5"/>
+        <text x="544" y="540" font-size="20">📟</text>
+        <text x="578" y="539" font-size="16.5">Simulate the chip — how does it cope?</text>
+        <text x="578" y="562" class="tiny" font-size="13">cycles · instructions · memory misses · time</text>
+
+        <path class="flow dash" d="M268 576 C 268 612, 420 608, 448 626" stroke="var(--mint)"/>
+        <path class="flow dash" d="M712 576 C 712 612, 560 608, 532 626" stroke="var(--mint)"/>
+
+        <!-- ===== band 5: result ===== -->
+        <rect x="270" y="624" width="440" height="78" rx="22" fill="var(--panel2)" stroke="var(--mint)" stroke-width="3"/>
+        <text x="306" y="662" font-size="22">🏁</text>
+        <text x="344" y="661" font-size="17.5">The setup worth building</text>
+        <text x="306" y="688" class="sub" font-size="14">fast enough, small enough, cheap enough — and correct</text>
+
+        <!-- feedback arrow -->
+        <path class="flow dash" d="M710 663 C 946 663, 952 250, 956 242 C 958 210, 940 198, 920 194" stroke="var(--amber)"/>
+        <polygon points="922,187 908,194 922,201" fill="var(--amber)"/>
+        <text x="944" y="450" text-anchor="middle" class="sub" font-size="14" transform="rotate(90 944 450)">try the next combination</text>
+
+        <!-- side legend -->
+        <g class="g-spark">
+          <text x="44" y="700" font-size="20">✦</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption>Every arrow is a real step in the project — start at the top and follow it down.</figcaption>
+  </figure>
+</section>
+
+</div>
+
+<footer>
+  <svg class="f-girl" viewBox="0 0 150 215" role="img" aria-label="Maya waving goodbye." data-pose=""></svg>
+  <h2 style="margin-bottom:8px">Thanks for reading!</h2>
+  <p style="margin:0 auto;color:var(--dim);max-width:46ch">An AI tutor small enough for one desk, designed alongside the chip it runs on.</p>
+  <div class="f-line">EDGE TUTOR · PROJECT 2026 · COMPLETE</div>
+</footer>
+
+<script>
+(function(){
+  var ART = `
+      <ellipse cx="78" cy="206" rx="38" ry="7" fill="rgba(0,0,0,.3)"/>
+      <g class="g-bob">
+        <g class="g-bag">
+          <rect x="34" y="88" width="38" height="52" rx="15" fill="var(--coral)"/>
+          <rect x="39" y="102" width="28" height="18" rx="7" fill="#FFB4A4"/>
+          <rect x="45" y="84" width="8" height="16" rx="4" fill="#E0614C"/>
+          <circle cx="53" cy="130" r="4" fill="#E0614C"/>
+        </g>
+        <rect x="66" y="152" width="13" height="40" rx="6" fill="#3E5C7E"/>
+        <rect x="87" y="152" width="13" height="40" rx="6" fill="#3E5C7E"/>
+        <ellipse cx="72" cy="196" rx="12" ry="7" fill="var(--amber)"/>
+        <ellipse cx="93" cy="196" rx="12" ry="7" fill="var(--amber)"/>
+        <path d="M62 84 H104 L112 158 H54 Z" fill="var(--violet)"/>
+        <path d="M62 84 H104 L107 112 H59 Z" fill="#C8AEFF"/>
+        <rect x="55" y="90" width="11" height="42" rx="5.5" fill="var(--skin-sh)" transform="rotate(8 60 92)"/>
+        <g class="g-arm">
+          <rect x="72" y="90" width="11" height="44" rx="5.5" fill="var(--skin)" transform="rotate(-38 78 96)"/>
+          <circle cx="104" cy="70" r="8" fill="var(--skin)"/>
+        </g>
+        <rect x="76" y="70" width="14" height="18" rx="6" fill="var(--skin-sh)"/>
+        <circle cx="83" cy="48" r="26" fill="var(--skin)"/>
+        <path d="M57 48 C 55 20, 78 12, 92 18 C 110 24, 111 44, 108 54 C 106 40, 98 33, 86 33 C 72 33, 60 38, 57 56 Z" fill="var(--hair)"/>
+        <path d="M105 44 C 118 52, 120 80, 110 92 C 114 74, 110 58, 103 52 Z" fill="var(--hair2)"/>
+        <circle cx="62" cy="30" r="7" fill="var(--mint)"/>
+        <g class="g-eye" style="transform-origin:76px 50px"><circle cx="76" cy="50" r="3.1" fill="#2A2030"/></g>
+        <g class="g-eye" style="transform-origin:94px 50px"><circle cx="94" cy="50" r="3.1" fill="#2A2030"/></g>
+        <circle cx="68" cy="58" r="4.2" fill="#FFAFA0" opacity=".65"/>
+        <circle cx="100" cy="58" r="4.2" fill="#FFAFA0" opacity=".65"/>
+        <path d="M78 60 Q 85 67, 92 60" stroke="#8A4A46" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+      </g>`;
+
+  var EXTRA = {
+    point: '<g class="g-spark"><circle cx="122" cy="62" r="4" fill="var(--amber)"/><circle cx="133" cy="50" r="2.6" fill="var(--amber)"/></g>',
+    up:    '<g class="g-spark"><path d="M112 30 l4 9 10 1 -7 7 2 10 -9 -5 -9 5 2 -10 -7 -7 10 -1 z" fill="var(--amber)"/></g>',
+    present:'<g class="g-spark"><circle cx="124" cy="46" r="3.4" fill="var(--mint)"/><circle cx="134" cy="60" r="2.4" fill="var(--mint)"/><circle cx="118" cy="64" r="2" fill="var(--mint)"/></g>',
+    think: '<g class="g-spark"><circle cx="116" cy="34" r="3" fill="var(--sky)"/><circle cx="126" cy="24" r="5" fill="var(--sky)"/><circle cx="138" cy="12" r="7" fill="var(--sky)"/></g>',
+    '':    '<g class="g-spark"><circle cx="124" cy="48" r="3.2" fill="var(--amber)"/><circle cx="134" cy="38" r="2.2" fill="var(--amber)"/></g>'
+  };
+
+  document.querySelectorAll('svg.girl, svg.f-girl').forEach(function(svg){
+    var pose = svg.getAttribute('data-pose') || '';
+    svg.innerHTML = ART + (EXTRA[pose] || EXTRA['']);
+    if(pose) svg.classList.add('pose-' + pose);
+  });
+})();
+</script>
+<style>
+svg.pose-point .g-arm{animation:poke 2s ease-in-out infinite}
+svg.pose-up .g-arm, svg.pose-present .g-arm{animation:lift 3s ease-in-out infinite}
+svg.pose-think .g-arm{animation:ponder 4s ease-in-out infinite}
+@keyframes ponder{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(-34deg) translateY(-3px)}}
+</style>
+
+</body>
+</html>
