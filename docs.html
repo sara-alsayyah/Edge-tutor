@@ -1,0 +1,6514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Edge Tutor — Technical Documentation</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root{
+      --night:#0B1729;
+      --night2:#112542;
+      --panel:#16304F;
+      --panel2:#1C3B60;
+
+      --line:#2B5178;
+      --soft:#1F3C5C;
+
+      --ink:#F1F6FC;
+      --dim:#AFC4DA;
+      --faint:#7392B0;
+
+      --coral:#FF8A72;
+      --amber:#FFC552;
+      --mint:#5FE3B0;
+      --violet:#B79BFF;
+      --sky:#5CCBF7;
+      --pink:#FF9ECF;
+
+      --display:'Baloo 2', system-ui, sans-serif;
+      --body:'Nunito', system-ui, sans-serif;
+      --mono:'IBM Plex Mono', ui-monospace, monospace;
+
+      --sidebar:260px;
+      --max:1180px;
+      --r:18px;
+    }
+
+
+    *{
+      box-sizing:border-box;
+    }
+
+
+    html{
+      scroll-behavior:smooth;
+      scroll-padding-top:90px;
+      -webkit-text-size-adjust:100%;
+    }
+
+
+    body{
+      margin:0;
+      color:var(--ink);
+      font-family:var(--body);
+      font-size:16px;
+      line-height:1.7;
+
+      background:
+        radial-gradient(900px 520px at 5% -5%, rgba(183,155,255,.16), transparent 62%),
+        radial-gradient(820px 480px at 100% 4%, rgba(92,203,247,.12), transparent 62%),
+        radial-gradient(900px 640px at 50% 105%, rgba(95,227,176,.09), transparent 62%),
+        var(--night);
+
+      overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
+    }
+
+
+    a{
+      color:var(--sky);
+      text-decoration:none;
+    }
+
+
+    a:hover{
+      text-decoration:underline;
+    }
+
+
+    ::selection{
+      background:var(--amber);
+      color:var(--night);
+    }
+
+
+    :focus-visible{
+      outline:3px solid var(--amber);
+      outline-offset:3px;
+      border-radius:6px;
+    }
+
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .top{
+      position:sticky;
+      top:0;
+      z-index:100;
+
+      background:rgba(11,23,41,.94);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--soft);
+    }
+
+
+    .nav{
+      max-width:1280px;
+      margin:0 auto;
+      min-height:64px;
+      padding:10px clamp(16px,3vw,32px);
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+    }
+
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+
+      color:var(--ink);
+      font-family:var(--display);
+      font-size:20px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+
+    .bdot{
+      width:30px;
+      height:30px;
+      border-radius:10px;
+
+      display:grid;
+      place-items:center;
+
+      background:linear-gradient(135deg,var(--amber),var(--coral));
+      color:var(--night);
+    }
+
+
+    .brand-meta{
+      color:var(--faint);
+      font-family:var(--mono);
+      font-size:11px;
+      font-weight:400;
+      margin-left:4px;
+    }
+
+
+    .back-link{
+      display:flex;
+      align-items:center;
+      gap:8px;
+
+      padding:7px 13px;
+      border:1px solid var(--line);
+      border-radius:999px;
+
+      color:var(--dim);
+      background:var(--night2);
+
+      font-size:13px;
+      font-weight:700;
+
+      transition:.2s ease;
+    }
+
+
+    .back-link:hover{
+      color:var(--ink);
+      border-color:var(--sky);
+      background:var(--panel);
+      text-decoration:none;
+      transform:translateY(-1px);
+    }
+
+
+    /* =========================
+       MOBILE BAR
+    ========================= */
+
+    .mobile-bar{
+      display:none;
+
+      position:sticky;
+      top:64px;
+      z-index:90;
+
+      padding:10px 16px;
+
+      background:rgba(11,23,41,.96);
+      border-bottom:1px solid var(--soft);
+    }
+
+
+    .mobile-menu-btn{
+      width:100%;
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+
+      padding:9px 13px;
+
+      color:var(--ink);
+      background:var(--night2);
+      border:1px solid var(--line);
+      border-radius:12px;
+
+      font-family:var(--body);
+      font-size:14px;
+      font-weight:800;
+
+      cursor:pointer;
+    }
+
+
+    /* =========================
+       LAYOUT
+    ========================= */
+
+    .docs-layout{
+      width:min(100%,1280px);
+      margin:0 auto;
+
+      display:grid;
+      grid-template-columns:var(--sidebar) minmax(0,1fr);
+      gap:42px;
+
+      padding:42px clamp(16px,3vw,32px) 80px;
+    }
+
+
+    /* =========================
+       SIDEBAR
+    ========================= */
+
+    .sidebar{
+      position:sticky;
+      top:88px;
+      align-self:start;
+
+      max-height:calc(100vh - 110px);
+      overflow:auto;
+
+      padding:18px 12px;
+
+      background:rgba(17,37,66,.58);
+      border:1px solid var(--soft);
+      border-radius:18px;
+    }
+
+
+    .side-label{
+      padding:2px 12px 12px;
+
+      color:var(--faint);
+      font-family:var(--mono);
+      font-size:11px;
+      font-weight:500;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+
+    .side-link{
+      display:flex;
+      align-items:center;
+      gap:9px;
+
+      margin:2px 0;
+      padding:8px 11px;
+
+      border-radius:10px;
+
+      color:var(--dim);
+      font-size:13.5px;
+      font-weight:700;
+
+      transition:.18s ease;
+    }
+
+
+    .side-link::before{
+      content:"";
+      width:5px;
+      height:5px;
+      flex:none;
+
+      border-radius:50%;
+      background:var(--line);
+
+      transition:.18s ease;
+    }
+
+
+    .side-link:hover{
+      color:var(--ink);
+      background:var(--panel);
+      text-decoration:none;
+    }
+
+
+    .side-link:hover::before{
+      background:var(--sky);
+    }
+
+
+    .side-link.active{
+      color:var(--ink);
+      background:rgba(92,203,247,.09);
+    }
+
+
+    .side-link.active::before{
+      background:var(--sky);
+      box-shadow:0 0 0 3px rgba(92,203,247,.12);
+    }
+
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    main{
+      min-width:0;
+    }
+
+
+    .hero-docs{
+      padding:18px 0 54px;
+    }
+
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+
+      margin-bottom:15px;
+      padding:5px 12px;
+
+      border-radius:999px;
+
+      background:var(--amber);
+      color:var(--night);
+
+      font-family:var(--mono);
+      font-size:11px;
+      font-weight:500;
+    }
+
+
+    .eyebrow.violet{
+      background:var(--violet);
+    }
+
+
+    .eyebrow.sky{
+      background:var(--sky);
+    }
+
+
+    .eyebrow.mint{
+      background:var(--mint);
+    }
+
+
+    .eyebrow.coral{
+      background:var(--coral);
+    }
+
+
+    h1,
+    h2,
+    h3,
+    h4{
+      font-family:var(--display);
+    }
+
+
+    h1{
+      max-width:850px;
+      margin:0 0 16px;
+
+      font-size:clamp(38px,5vw,62px);
+      line-height:1.04;
+      font-weight:800;
+    }
+
+
+    h2{
+      margin:0 0 15px;
+
+      font-size:clamp(28px,3.5vw,40px);
+      line-height:1.15;
+      font-weight:700;
+    }
+
+
+    h3{
+      margin:0 0 7px;
+
+      font-size:20px;
+      line-height:1.3;
+    }
+
+
+    h4{
+      margin:0 0 6px;
+      font-size:17px;
+    }
+
+
+    p{
+      max-width:75ch;
+      margin:0 0 16px;
+    }
+
+
+    .lead{
+      max-width:70ch;
+
+      color:var(--dim);
+      font-size:clamp(16px,1.5vw,19px);
+    }
+
+
+    .muted{
+      color:var(--dim);
+    }
+
+
+    .faint{
+      color:var(--faint);
+    }
+
+
+    section.doc-section{
+      padding:58px 0;
+      border-top:1px solid var(--soft);
+      scroll-margin-top:90px;
+    }
+
+
+    /* =========================
+       GRIDS / CARDS
+    ========================= */
+
+    .grid{
+      display:grid;
+      gap:16px;
+    }
+
+
+    .g2{
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+
+    .g3{
+      grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+
+
+    .card{
+      padding:20px;
+
+      background:var(--night2);
+      border:1px solid var(--soft);
+      border-radius:var(--r);
+
+      transition:.2s ease;
+    }
+
+
+    .card:hover{
+      transform:translateY(-3px);
+      border-color:var(--line);
+      box-shadow:0 12px 28px rgba(0,0,0,.22);
+    }
+
+
+    .card.accent-v{
+      border-color:rgba(183,155,255,.42);
+    }
+
+
+    .card.accent-s{
+      border-color:rgba(92,203,247,.42);
+    }
+
+
+    .card.accent-m{
+      border-color:rgba(95,227,176,.42);
+    }
+
+
+    .card.accent-a{
+      border-color:rgba(255,197,82,.42);
+    }
+
+
+    .card.accent-c{
+      border-color:rgba(255,138,114,.42);
+    }
+
+
+    .card p{
+      color:var(--dim);
+      font-size:14.5px;
+      margin:0;
+    }
+
+
+    .card-icon{
+      width:42px;
+      height:42px;
+      margin-bottom:13px;
+
+      display:grid;
+      place-items:center;
+
+      border-radius:12px;
+
+      background:var(--panel);
+      color:var(--sky);
+      font-family:var(--mono);
+      font-size:15px;
+      font-weight:500;
+    }
+
+
+    /* =========================
+       CALLOUTS
+    ========================= */
+
+    .callout{
+      margin:22px 0;
+      padding:17px 19px;
+
+      background:rgba(92,203,247,.06);
+      border:1px solid rgba(92,203,247,.3);
+      border-left:4px solid var(--sky);
+      border-radius:12px;
+    }
+
+
+    .callout strong{
+      display:block;
+      margin-bottom:3px;
+      color:var(--ink);
+    }
+
+
+    .callout p{
+      margin:0;
+      color:var(--dim);
+      font-size:14.5px;
+    }
+
+
+    .callout.warning{
+      background:rgba(255,197,82,.055);
+      border-color:rgba(255,197,82,.3);
+      border-left-color:var(--amber);
+    }
+
+
+    .callout.validation{
+      background:rgba(183,155,255,.055);
+      border-color:rgba(183,155,255,.3);
+      border-left-color:var(--violet);
+    }
+
+
+    /* =========================
+       VISUAL SNAPSHOT
+    ========================= */
+
+    .visual-snapshot{
+      display:grid;
+      grid-template-columns:minmax(0,1.7fr) minmax(260px,.8fr);
+      gap:16px;
+      margin-top:24px;
+    }
+
+
+    .snapshot-main{
+      padding:22px;
+
+      background:
+        radial-gradient(circle at 20% 20%,rgba(183,155,255,.12),transparent 35%),
+        var(--night2);
+
+      border:1px solid var(--soft);
+      border-radius:20px;
+    }
+
+
+    .snapshot-label{
+      margin-bottom:20px;
+
+      color:var(--faint);
+      font-family:var(--mono);
+      font-size:10px;
+      letter-spacing:.1em;
+    }
+
+
+    .snapshot-flow{
+      display:grid;
+      grid-template-columns:1fr 50px 1.25fr 50px 1fr;
+      align-items:center;
+      gap:8px;
+    }
+
+
+    .snapshot-node{
+      min-height:125px;
+      padding:17px;
+
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+
+      text-align:center;
+
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:16px;
+    }
+
+
+    .snapshot-node.student{
+      border-color:rgba(183,155,255,.45);
+    }
+
+
+    .snapshot-node.tutor{
+      border-color:rgba(95,227,176,.5);
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(95,227,176,.08),
+          var(--panel)
+        );
+    }
+
+
+    .snapshot-node.answer{
+      border-color:rgba(92,203,247,.45);
+    }
+
+
+    .snapshot-icon{
+      width:38px;
+      height:38px;
+      margin-bottom:8px;
+
+      display:grid;
+      place-items:center;
+
+      border-radius:11px;
+
+      background:var(--panel2);
+      color:var(--sky);
+
+      font-family:var(--mono);
+      font-size:12px;
+    }
+
+
+    .snapshot-node strong{
+      font-family:var(--display);
+      font-size:18px;
+    }
+
+
+    .snapshot-node small{
+      color:var(--dim);
+      font-size:12px;
+    }
+
+
+    .snapshot-arrow{
+      color:var(--faint);
+      text-align:center;
+      font-family:var(--mono);
+      font-size:22px;
+    }
+
+
+    .snapshot-side{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+
+    .mini-stat{
+      padding:16px;
+
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+
+      background:var(--night2);
+      border:1px solid var(--soft);
+      border-radius:15px;
+    }
+
+
+    .mini-stat span{
+      color:var(--faint);
+      font-family:var(--mono);
+      font-size:9px;
+      letter-spacing:.08em;
+    }
+
+
+    .mini-stat strong{
+      margin:4px 0 1px;
+
+      color:var(--ink);
+      font-family:var(--display);
+      font-size:18px;
+    }
+
+
+    .mini-stat small{
+      color:var(--dim);
+      font-size:11px;
+    }
+
+
+    /* =========================
+       BIG PICTURE
+    ========================= */
+
+    .big-picture{
+      margin-top:30px;
+      padding:22px;
+
+      background:
+        radial-gradient(circle at 50% 0%,rgba(183,155,255,.09),transparent 45%),
+        var(--night2);
+
+      border:1px solid var(--soft);
+      border-radius:20px;
+    }
+
+
+    .big-picture-title{
+      margin-bottom:20px;
+    }
+
+
+    .big-picture-title span{
+      display:block;
+
+      color:var(--faint);
+      font-family:var(--mono);
+      font-size:9px;
+      letter-spacing:.1em;
+    }
+
+
+    .big-picture-title strong{
+      display:block;
+      margin-top:4px;
+
+      font-family:var(--display);
+      font-size:22px;
+    }
+
+
+    .big-picture-flow{
+      display:flex;
+      align-items:center;
+    }
+
+
+    .bp-box{
+      flex:1;
+      min-height:105px;
+      padding:14px;
+
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:13px;
+    }
+
+
+    .bp-box b{
+      color:var(--faint);
+      font-family:var(--mono);
+      font-size:9px;
+    }
+
+
+    .bp-box strong{
+      display:block;
+      margin-top:5px;
+
+      font-family:var(--display);
+      font-size:16px;
+    }
+
+
+    .bp-box small{
+      display:block;
+      margin-top:3px;
+
+      color:var(--dim);
+      font-size:11px;
+    }
+
+
+    .tutor-box{
+      border-color:rgba(95,227,176,.4);
+    }
+
+
+    .chia-box{
+      border-color:rgba(92,203,247,.4);
+    }
+
+
+    .proxy-box{
+      border-color:rgba(255,197,82,.4);
+    }
+
+
+    .bp-line{
+      width:28px;
+      height:1px;
+      flex:none;
+
+      background:var(--line);
+    }
+
+
+    /* =========================
+       ARCHITECTURE
+    ========================= */
+
+    .architecture{
+      padding:24px;
+
+      background:var(--night2);
+      border:1px solid var(--soft);
+      border-radius:20px;
+    }
+
+
+    .arch-top,
+    .arch-validation{
+      max-width:520px;
+      margin:auto;
+    }
+
+
+    .arch-down{
+      height:34px;
+
+      display:grid;
+      place-items:center;
+
+      color:var(--sky);
+      font-family:var(--mono);
+      font-size:20px;
+    }
+
+
+    .arch-split{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+
+
+    .arch-path{
+      padding:16px;
+
+      background:rgba(8,19,33,.35);
+      border:1px dashed var(--line);
+      border-radius:17px;
+    }
+
+
+    .native-path{
+      border-color:rgba(95,227,176,.3);
+    }
+
+
+    .proxy-path{
+      border-color:rgba(255,197,82,.3);
+    }
+
+
+    .path-title{
+      margin-bottom:14px;
+    }
+
+
+    .path-title span{
+      display:block;
+
+      color:var(--faint);
+      font-family:var(--mono);
+      font-size:9px;
+      letter-spacing:.1em;
+    }
+
+
+    .path-title b{
+      font-family:var(--display);
+      font-size:18px;
+    }
+
+
+    .path-arrow{
+      padding:7px 0;
+
+      color:var(--faint);
+      text-align:center;
+      font-family:var(--mono);
+    }
+
+
+    .arch-node{
+      min-height:84px;
+      padding:16px;
+
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:14px;
+    }
+
+
+    .arch-node strong{
+      font-family:var(--display);
+      font-size:17px;
+    }
+
+
+    .arch-node small{
+      margin-top:3px;
+      color:var(--dim);
+      font-size:13px;
+    }
+
+
+    .arch-node.gemini{
+      border-color:rgba(183,155,255,.6);
+    }
+
+
+    .arch-node.chia{
+      border-color:rgba(92,203,247,.6);
+    }
+
+
+    .arch-node.native{
+      border-color:rgba(95,227,176,.6);
+    }
+
+
+    .arch-node.gem5{
+      border-color:rgba(255,197,82,.6);
+    }
+
+
+    .arch-kicker{
+      display:block;
+      margin-bottom:3px;
+
+      color:var(--faint);
+      font-family:var(--mono);
+      font-size:9px;
+      letter-spacing:.1em;
+    }
+
+
+    .arch-merge{
+      margin:14px auto 0;
+      max-width:400px;
+
+      padding:15px;
+
+      text-align:center;
+
+      background:var(--panel2);
+      border:2px solid var(--line);
+      border-radius:14px;
+    }
+
+
+    .arch-merge strong{
+      font-family:var(--display);
+    }
+
+
+    .arch-merge small{
+      display:block;
+      margin-top:3px;
+      color:var(--dim);
+    }
+
+
+    /* =========================
+       QUANTIZATION MAP
+    ========================= */
+
+    .quantization-map{
+      display:grid;
+      grid-template-columns:1fr 90px 1fr;
+      align-items:center;
+      gap:14px;
+      margin-top:18px;
+    }
+
+
+    .quant-box{
+      min-height:150px;
+      padding:22px;
+
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+
+      background:var(--night2);
+      border:1px solid var(--soft);
+      border-radius:18px;
+    }
+
+
+    .tutor-quant{
+      border-color:rgba(95,227,176,.42);
+    }
+
+
+    .proxy-quant{
+      border-color:rgba(255,197,82,.42);
+    }
+
+
+    .quant-badge{
+      margin-bottom:8px;
+
+      color:var(--faint);
+      font-family:var(--mono);
+      font-size:9px;
+      letter-spacing:.1em;
+    }
+
+
+    .quant-box strong{
+      font-family:var(--display);
+      font-size:29px;
+    }
+
+
+    .quant-box span{
+      color:var(--ink);
+      font-size:14px;
+    }
+
+
+    .quant-box small{
+      margin-top:6px;
+      color:var(--dim);
+      font-size:12px;
+    }
+
+
+    .quant-connector{
+      text-align:center;
+    }
+
+
+    .quant-connector span{
+      width:42px;
+      height:42px;
+      margin:auto;
+
+      display:grid;
+      place-items:center;
+
+      border:1px solid var(--line);
+      border-radius:50%;
+
+      background:var(--panel);
+      color:var(--amber);
+
+      font-family:var(--mono);
+    }
+
+
+    .quant-connector small{
+      display:block;
+      margin-top:6px;
+      color:var(--faint);
+      font-size:10px;
+    }
+
+
+    /* =========================
+       SPEC LIST
+    ========================= */
+
+    .spec-list{
+      display:grid;
+      gap:7px;
+      margin-top:16px;
+    }
+
+
+    .spec-list div{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+
+      padding:8px 10px;
+
+      background:rgba(8,19,33,.35);
+      border-radius:8px;
+    }
+
+
+    .spec-list span{
+      color:var(--faint);
+      font-family:var(--mono);
+      font-size:9px;
+    }
+
+
+    .spec-list strong{
+      color:var(--ink);
+      font-family:var(--mono);
+      font-size:11px;
+      text-align:right;
+    }
+
+
+    /* =========================
+       PROXY VISUAL
+    ========================= */
+
+    .proxy-visual{
+      display:grid;
+      grid-template-columns:1fr 45px 1.15fr 45px 1fr;
+      align-items:center;
+      gap:8px;
+
+      margin:25px 0;
+      padding:20px;
+
+      background:
+        radial-gradient(circle at 50% 50%,rgba(255,197,82,.07),transparent 45%),
+        var(--night2);
+
+      border:1px solid var(--soft);
+      border-radius:20px;
+    }
+
+
+    .proxy-context,
+    .proxy-attention,
+    .proxy-result{
+      min-height:145px;
+      padding:17px;
+
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:15px;
+    }
+
+
+    .proxy-attention{
+      border-color:rgba(255,197,82,.45);
+    }
+
+
+    .proxy-result{
+      border-color:rgba(92,203,247,.4);
+    }
+
+
+    .proxy-title span{
+      display:block;
+
+      color:var(--faint);
+      font-family:var(--mono);
+      font-size:9px;
+      letter-spacing:.1em;
+    }
+
+
+    .proxy-title strong{
+      display:block;
+      margin-top:3px;
+
+      font-family:var(--display);
+      font-size:17px;
+    }
+
+
+    .proxy-visual small{
+      display:block;
+      margin-top:12px;
+
+      color:var(--dim);
+      font-size:11px;
+    }
+
+
+    .kv-row{
+      display:flex;
+      align-items:end;
+      gap:5px;
+      height:45px;
+      margin-top:12px;
+    }
+
+
+    .kv-row i{
+      width:14px;
+      height:26px;
+
+      display:block;
+
+      background:var(--panel2);
+      border:1px solid var(--line);
+      border-radius:4px;
+    }
+
+
+    .kv-row i:nth-child(2),
+    .kv-row i:nth-child(5){
+      height:37px;
+    }
+
+
+    .kv-row i:nth-child(3),
+    .kv-row i:nth-child(6){
+      height:31px;
+    }
+
+
+    .kv-row span{
+      color:var(--faint);
+      font-family:var(--mono);
+    }
+
+
+    .attention-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:5px;
+      margin-top:13px;
+    }
+
+
+    .attention-grid span,
+    .attention-grid b{
+      padding:9px 4px;
+
+      text-align:center;
+
+      background:var(--panel2);
+      border-radius:6px;
+
+      color:var(--sky);
+      font-family:var(--mono);
+      font-size:11px;
+    }
+
+
+    .attention-grid b{
+      color:var(--amber);
+    }
+
+
+    .metric-mini{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:6px;
+      margin-top:13px;
+    }
+
+
+    .metric-mini span{
+      padding:7px;
+
+      background:var(--panel2);
+      border-radius:6px;
+
+      color:var(--dim);
+      font-family:var(--mono);
+      font-size:9px;
+      text-align:center;
+    }
+
+
+    .proxy-arrow{
+      color:var(--sky);
+      font-family:var(--mono);
+      font-size:20px;
+      text-align:center;
+    }
+
+
+    /* =========================
+       KNOB BOARD
+    ========================= */
+
+    .knob-board{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      margin:22px 0;
+    }
+
+
+    .knob-group{
+      padding:18px;
+
+      background:var(--night2);
+      border:1px solid var(--soft);
+      border-radius:18px;
+    }
+
+
+    .knob-heading{
+      display:flex;
+      align-items:center;
+      gap:8px;
+
+      margin-bottom:12px;
+
+      color:var(--ink);
+      font-family:var(--mono);
+      font-size:11px;
+      font-weight:500;
+      letter-spacing:.08em;
+    }
+
+
+    .knob-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+    }
+
+
+    .knob-dot.software{
+      background:var(--mint);
+    }
+
+
+    .knob-dot.hardware{
+      background:var(--amber);
+    }
+
+
+    .knob{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+
+      margin:6px 0;
+      padding:10px 12px;
+
+      background:var(--panel);
+      border:1px solid transparent;
+      border-radius:9px;
+    }
+
+
+    .knob.selected{
+      border-color:rgba(95,227,176,.4);
+    }
+
+
+    .knob span{
+      color:var(--dim);
+      font-size:12px;
+    }
+
+
+    .knob strong{
+      color:var(--ink);
+      font-family:var(--mono);
+      font-size:10px;
+      text-align:right;
+    }
+
+
+    /* =========================
+       PIPELINE
+    ========================= */
+
+    .pipeline{
+      display:grid;
+      gap:10px;
+    }
+
+
+    .step{
+      display:grid;
+      grid-template-columns:44px 1fr;
+      gap:13px;
+      align-items:start;
+
+      padding:14px;
+
+      background:var(--night2);
+      border:1px solid var(--soft);
+      border-radius:14px;
+    }
+
+
+    .step-num{
+      width:34px;
+      height:34px;
+
+      display:grid;
+      place-items:center;
+
+      border-radius:10px;
+
+      background:var(--panel);
+      color:var(--amber);
+
+      font-family:var(--mono);
+      font-size:12px;
+      font-weight:500;
+    }
+
+
+    .step strong{
+      font-family:var(--display);
+      font-size:17px;
+    }
+
+
+    .step p{
+      margin:2px 0 0;
+      color:var(--dim);
+      font-size:14px;
+    }
+
+
+    /* =========================
+       TABLE
+    ========================= */
+
+    .table-wrap{
+      overflow-x:auto;
+
+      background:var(--night2);
+      border:1px solid var(--soft);
+      border-radius:16px;
+    }
+
+
+    table{
+      width:100%;
+      min-width:650px;
+      border-collapse:collapse;
+    }
+
+
+    th,
+    td{
+      padding:13px 15px;
+      text-align:left;
+      border-bottom:1px solid var(--soft);
+      vertical-align:top;
+    }
+
+
+    th{
+      background:var(--panel);
+      color:var(--ink);
+
+      font-family:var(--mono);
+      font-size:12px;
+      font-weight:500;
+    }
+
+
+    td{
+      color:var(--dim);
+      font-size:14px;
+    }
+
+
+    td strong{
+      color:var(--ink);
+    }
+
+
+    tr:last-child td{
+      border-bottom:none;
+    }
+
+
+    /* =========================
+       CODE
+    ========================= */
+
+    pre{
+      margin:18px 0;
+      padding:18px;
+
+      overflow:auto;
+
+      background:#081321;
+      border:1px solid var(--soft);
+      border-radius:14px;
+
+      color:#D9E7F5;
+
+      font-family:var(--mono);
+      font-size:13px;
+      line-height:1.65;
+    }
+
+
+    code{
+      font-family:var(--mono);
+      font-size:.9em;
+    }
+
+
+    :not(pre)>code{
+      padding:2px 6px;
+      background:var(--panel);
+      border-radius:6px;
+      color:var(--sky);
+    }
+
+
+    /* =========================
+       STATUS
+    ========================= */
+
+    .status{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+
+      padding:4px 9px;
+
+      border-radius:999px;
+
+      background:rgba(183,155,255,.1);
+      color:var(--violet);
+
+      font-family:var(--mono);
+      font-size:11px;
+    }
+
+
+    .status::before{
+      content:"";
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:currentColor;
+    }
+
+
+    .status.confirmed{
+      background:rgba(95,227,176,.1);
+      color:var(--mint);
+    }
+
+
+    .status.tbd{
+      background:rgba(255,197,82,.1);
+      color:var(--amber);
+    }
+
+
+    /* =========================
+       TRACE
+    ========================= */
+
+    .trace{
+      display:grid;
+      gap:8px;
+    }
+
+
+    .trace-step{
+      display:grid;
+      grid-template-columns:32px 1fr;
+      gap:12px;
+      align-items:center;
+
+      padding:13px 15px;
+
+      background:var(--night2);
+      border:1px solid var(--soft);
+      border-radius:12px;
+    }
+
+
+    .trace-step .dot{
+      width:27px;
+      height:27px;
+
+      display:grid;
+      place-items:center;
+
+      border-radius:50%;
+
+      background:var(--panel);
+      color:var(--sky);
+
+      font-family:var(--mono);
+      font-size:10px;
+    }
+
+
+    .trace-step strong{
+      font-family:var(--display);
+      font-size:16px;
+    }
+
+
+    .trace-step small{
+      display:block;
+      color:var(--dim);
+      font-size:13px;
+    }
+
+
+    /* =========================
+       EXPERIMENT CARD
+    ========================= */
+
+    .experiment-card{
+      margin-bottom:20px;
+      padding:20px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(92,203,247,.06),
+          transparent 55%
+        ),
+        var(--night2);
+
+      border:1px solid rgba(92,203,247,.25);
+      border-radius:18px;
+    }
+
+
+    .experiment-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:15px;
+      margin-bottom:17px;
+    }
+
+
+    .experiment-header span:first-child{
+      display:block;
+      color:var(--faint);
+      font-family:var(--mono);
+      font-size:9px;
+      letter-spacing:.1em;
+    }
+
+
+    .experiment-header strong{
+      display:block;
+      margin-top:3px;
+      font-family:var(--mono);
+      font-size:14px;
+    }
+
+
+    .experiment-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+    }
+
+
+    .experiment-grid div{
+      padding:10px;
+
+      background:var(--panel);
+      border-radius:9px;
+    }
+
+
+    .experiment-grid span{
+      display:block;
+      color:var(--faint);
+      font-family:var(--mono);
+      font-size:8px;
+    }
+
+
+    .experiment-grid strong{
+      display:block;
+      margin-top:3px;
+
+      color:var(--ink);
+      font-family:var(--mono);
+      font-size:11px;
+    }
+
+
+    /* =========================
+       METRICS
+    ========================= */
+
+    .metric-strip{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin:22px 0;
+    }
+
+
+    .metric-card{
+      min-height:115px;
+      padding:17px;
+
+      background:var(--night2);
+      border:1px solid var(--soft);
+      border-radius:15px;
+    }
+
+
+    .metric-symbol{
+      display:block;
+      margin-bottom:7px;
+
+      color:var(--sky);
+      font-family:var(--mono);
+      font-size:17px;
+    }
+
+
+    .metric-card strong{
+      display:block;
+      font-family:var(--display);
+      font-size:17px;
+    }
+
+
+    .metric-card small{
+      display:block;
+      margin-top:2px;
+
+      color:var(--dim);
+      font-size:11px;
+    }
+
+
+    /* =========================
+       COMPARE
+    ========================= */
+
+    .compare{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+
+
+    .compare-box{
+      padding:20px;
+
+      border-radius:16px;
+      background:var(--night2);
+      border:1px solid var(--soft);
+    }
+
+
+    .compare-box.yes{
+      border-color:rgba(95,227,176,.35);
+    }
+
+
+    .compare-box.no{
+      border-color:rgba(255,138,114,.35);
+    }
+
+
+    .compare-title{
+      margin-bottom:12px;
+
+      font-family:var(--display);
+      font-size:19px;
+    }
+
+
+    .compare-box ul{
+      margin:0;
+      padding-left:20px;
+      color:var(--dim);
+    }
+
+
+    .compare-box li{
+      margin:5px 0;
+    }
+
+
+    /* =========================
+       RESULTS STATUS
+    ========================= */
+
+    .results-status{
+      display:grid;
+      gap:10px;
+      margin:22px 0;
+    }
+
+
+    .result-state{
+      display:grid;
+      grid-template-columns:38px 1fr;
+      gap:12px;
+      align-items:center;
+
+      padding:14px;
+
+      background:var(--night2);
+      border:1px solid var(--soft);
+      border-radius:13px;
+    }
+
+
+    .result-icon{
+      width:32px;
+      height:32px;
+
+      display:grid;
+      place-items:center;
+
+      border-radius:9px;
+
+      background:rgba(95,227,176,.1);
+      color:var(--mint);
+
+      font-family:var(--mono);
+    }
+
+
+    .validation-state{
+      border-color:rgba(255,197,82,.3);
+    }
+
+
+    .validation-state .result-icon{
+      background:rgba(255,197,82,.1);
+      color:var(--amber);
+    }
+
+
+    .result-state strong{
+      display:block;
+      font-family:var(--display);
+      font-size:16px;
+    }
+
+
+    .result-state small{
+      display:block;
+      color:var(--dim);
+      font-size:12px;
+    }
+
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer{
+      margin-top:20px;
+      padding:38px 0 55px;
+
+      border-top:1px solid var(--soft);
+
+      color:var(--faint);
+      text-align:center;
+    }
+
+
+    footer strong{
+      color:var(--dim);
+      font-family:var(--display);
+      font-size:18px;
+    }
+
+
+    footer p{
+      margin:5px auto 0;
+      font-size:13px;
+    }
+
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media(max-width:900px){
+
+      .docs-layout{
+        grid-template-columns:1fr;
+        gap:18px;
+        padding-top:20px;
+      }
+
+
+      .sidebar{
+        position:fixed;
+        z-index:120;
+
+        top:116px;
+        left:16px;
+        right:16px;
+
+        max-height:calc(100vh - 135px);
+
+        display:none;
+      }
+
+
+      .sidebar.open{
+        display:block;
+      }
+
+
+      .mobile-bar{
+        display:block;
+      }
+
+
+      .g3{
+        grid-template-columns:1fr;
+      }
+
+
+      .big-picture-flow{
+        flex-direction:column;
+        align-items:stretch;
+      }
+
+
+      .bp-line{
+        width:1px;
+        height:25px;
+        margin:auto;
+      }
+    }
+
+
+    @media(max-width:760px){
+
+      .visual-snapshot{
+        grid-template-columns:1fr;
+      }
+
+
+      .snapshot-flow{
+        grid-template-columns:1fr;
+      }
+
+
+      .snapshot-arrow{
+        transform:rotate(90deg);
+        height:24px;
+      }
+
+
+      .arch-split{
+        grid-template-columns:1fr;
+      }
+
+
+      .proxy-visual{
+        grid-template-columns:1fr;
+      }
+
+
+      .proxy-arrow{
+        transform:rotate(90deg);
+      }
+
+
+      .quantization-map{
+        grid-template-columns:1fr;
+      }
+
+
+      .knob-board{
+        grid-template-columns:1fr;
+      }
+    }
+
+
+    @media(max-width:680px){
+
+      body{
+        font-size:15px;
+      }
+
+
+      .brand-meta{
+        display:none;
+      }
+
+
+      .back-link{
+        padding:7px 10px;
+      }
+
+
+      .back-link span{
+        display:none;
+      }
+
+
+      .g2,
+      .compare{
+        grid-template-columns:1fr;
+      }
+
+
+      .metric-strip{
+        grid-template-columns:1fr 1fr;
+      }
+
+
+      .experiment-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+
+      .experiment-header{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+
+      section.doc-section{
+        padding:45px 0;
+      }
+
+
+      .architecture{
+        padding:15px;
+      }
+
+
+      .hero-docs{
+        padding-top:8px;
+      }
+    }
+
+
+    @media(max-width:480px){
+
+      .metric-strip{
+        grid-template-columns:1fr;
+      }
+
+
+      .experiment-grid{
+        grid-template-columns:1fr;
+      }
+
+
+      .snapshot-side{
+        grid-template-columns:1fr;
+      }
+
+
+      .knob{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+
+      .knob strong{
+        text-align:left;
+      }
+    }
+
+
+    @media(prefers-reduced-motion:reduce){
+
+      html{
+        scroll-behavior:auto;
+      }
+
+
+      *,
+      *::before,
+      *::after{
+        transition:none!important;
+      }
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+
+  <!-- =========================
+       HEADER
+  ========================= -->
+
+  <header class="top">
+
+    <div class="nav">
+
+      <div class="brand">
+
+        <span class="bdot">✦</span>
+
+        Edge Tutor
+
+        <span class="brand-meta">
+          / technical docs
+        </span>
+
+      </div>
+
+
+      <a class="back-link" href="index.html">
+
+        ←
+
+        <span>
+          Back to main site
+        </span>
+
+      </a>
+
+    </div>
+
+  </header>
+
+
+  <!-- =========================
+       MOBILE SIDEBAR BUTTON
+  ========================= -->
+
+  <div class="mobile-bar">
+
+    <button class="mobile-menu-btn" id="menuBtn">
+
+      <span id="menuLabel">
+        Documentation menu
+      </span>
+
+      <span>
+        ☰
+      </span>
+
+    </button>
+
+  </div>
+
+
+  <!-- =========================
+       DOCUMENTATION LAYOUT
+  ========================= -->
+
+  <div class="docs-layout">
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <aside class="sidebar" id="sidebar">
+
+      <div class="side-label">
+        Technical Documentation
+      </div>
+
+      <a class="side-link active" href="#overview">
+        Overview
+      </a>
+
+      <a class="side-link" href="#architecture">
+        System Architecture
+      </a>
+
+      <a class="side-link" href="#chia-loop">
+        CHIA Loop
+      </a>
+
+      <a class="side-link" href="#edge-tutor">
+        Edge AI Tutor
+      </a>
+
+      <a class="side-link" href="#gem5-proxy">
+        gem5 Proxy
+      </a>
+
+      <a class="side-link" href="#design-space">
+        HW/SW Design Space
+      </a>
+
+      <a class="side-link" href="#metrics">
+        Metrics & Objectives
+      </a>
+
+      <a class="side-link" href="#optimization">
+        Optimization Strategy
+      </a>
+
+      <a class="side-link" href="#methodology">
+        Experiment Methodology
+      </a>
+
+      <a class="side-link" href="#trace">
+        Trace One Experiment
+      </a>
+
+      <a class="side-link" href="#results">
+        Results
+      </a>
+
+      <a class="side-link" href="#limitations">
+        Validity & Limitations
+      </a>
+
+      <a class="side-link" href="#reproducibility">
+        Reproducibility
+      </a>
+
+      <a class="side-link" href="#references">
+        References
+      </a>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main>
+
+
+      <!-- =========================
+           OVERVIEW
+      ========================= -->
+
+      <section class="hero-docs" id="overview">
+
+        <span class="eyebrow violet">
+          TECHNICAL DOCUMENTATION
+        </span>
+
+
+        <h1>
+          How Edge Tutor works under the hood.
+        </h1>
+
+
+        <p class="lead">
+
+          Edge Tutor is an offline AI tutoring workload designed to explore
+          hardware/software co-design on resource-constrained edge systems.
+          This documentation describes the technical architecture,
+          evaluation flow, optimization process, and experimental methodology
+          behind the project.
+
+        </p>
+
+
+        <div class="callout">
+
+          <strong>
+            Documentation status
+          </strong>
+
+          <p>
+
+            This documentation reflects the current project scope.
+            Details that are not yet finalized are explicitly marked
+            <strong>TBD / Under validation</strong>.
+
+          </p>
+
+        </div>
+
+
+        <!-- VISUAL SNAPSHOT -->
+
+        <div class="visual-snapshot">
+
+          <div class="snapshot-main">
+
+            <div class="snapshot-label">
+              CURRENT BASELINE
+            </div>
+
+
+            <div class="snapshot-flow">
+
+              <div class="snapshot-node student">
+
+                <span class="snapshot-icon">
+                  ?
+                </span>
+
+                <strong>
+                  Student
+                </strong>
+
+                <small>
+                  Question
+                </small>
+
+              </div>
+
+
+              <div class="snapshot-arrow">
+                →
+              </div>
+
+
+              <div class="snapshot-node tutor">
+
+                <span class="snapshot-icon">
+                  AI
+                </span>
+
+                <strong>
+                  Edge Tutor
+                </strong>
+
+                <small>
+                  Qwen2.5 · Q5_K_M
+                </small>
+
+              </div>
+
+
+              <div class="snapshot-arrow">
+                →
+              </div>
+
+
+              <div class="snapshot-node answer">
+
+                <span class="snapshot-icon">
+                  ✓
+                </span>
+
+                <strong>
+                  Answer
+                </strong>
+
+                <small>
+                  Offline inference
+                </small>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="snapshot-side">
+
+            <div class="mini-stat">
+
+              <span>
+                MODEL
+              </span>
+
+              <strong>
+                Qwen2.5 0.5B
+              </strong>
+
+              <small>
+                Instruct
+              </small>
+
+            </div>
+
+
+            <div class="mini-stat">
+
+              <span>
+                QUANTIZATION
+              </span>
+
+              <strong>
+                Q5_K_M
+              </strong>
+
+              <small>
+                Selected baseline
+              </small>
+
+            </div>
+
+
+            <div class="mini-stat">
+
+              <span>
+                RAG
+              </span>
+
+              <strong>
+                OUT
+              </strong>
+
+              <small>
+                Inference-only workload
+              </small>
+
+            </div>
+
+
+            <div class="mini-stat">
+
+              <span>
+                HARDWARE PROXY
+              </span>
+
+              <strong>
+                Q4 KV
+              </strong>
+
+              <small>
+                Attention kernel
+              </small>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- OVERVIEW CARDS -->
+
+        <div class="grid g3" style="margin-top:16px;">
+
+          <div class="card accent-v">
+
+            <div class="card-icon">
+              SW
+            </div>
+
+            <h3>
+              Software workload
+            </h3>
+
+            <p>
+
+              Qwen2.5-0.5B-Instruct Q5_K_M provides the selected
+              application-level tutor workload.
+
+            </p>
+
+          </div>
+
+
+          <div class="card accent-s">
+
+            <div class="card-icon">
+              HW
+            </div>
+
+            <h3>
+              Hardware exploration
+            </h3>
+
+            <p>
+
+              Hardware configurations are explored through a
+              gem5-based attention proxy rather than full Qwen simulation.
+
+            </p>
+
+          </div>
+
+
+          <div class="card accent-m">
+
+            <div class="card-icon">
+              ↻
+            </div>
+
+            <h3>
+              Co-design loop
+            </h3>
+
+            <p>
+
+              CHIA coordinates validation, dispatch, measurement,
+              result recording, and candidate search controls.
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- BIG PICTURE -->
+
+        <div class="big-picture">
+
+          <div class="big-picture-title">
+
+            <span>
+              THE TECHNICAL PICTURE
+            </span>
+
+            <strong>
+              One workload, two evaluation paths.
+            </strong>
+
+          </div>
+
+
+          <div class="big-picture-flow">
+
+            <div class="bp-box">
+
+              <b>01</b>
+
+              <strong>
+                Student Question
+              </strong>
+
+              <small>
+                Application input
+              </small>
+
+            </div>
+
+
+            <div class="bp-line"></div>
+
+
+            <div class="bp-box tutor-box">
+
+              <b>02</b>
+
+              <strong>
+                Qwen2.5 Q5_K_M
+              </strong>
+
+              <small>
+                Native CPU inference
+              </small>
+
+            </div>
+
+
+            <div class="bp-line"></div>
+
+
+            <div class="bp-box chia-box">
+
+              <b>03</b>
+
+              <strong>
+                CHIA
+              </strong>
+
+              <small>
+                Validate · dispatch · record
+              </small>
+
+            </div>
+
+
+            <div class="bp-line"></div>
+
+
+            <div class="bp-box proxy-box">
+
+              <b>04</b>
+
+              <strong>
+                Q4 KV Attention
+              </strong>
+
+              <small>
+                gem5 architectural proxy
+              </small>
+
+            </div>
+
+
+            <div class="bp-line"></div>
+
+
+            <div class="bp-box">
+
+              <b>05</b>
+
+              <strong>
+                Evidence
+              </strong>
+
+              <small>
+                Quality + performance + hardware metrics
+              </small>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           ARCHITECTURE
+      ========================= -->
+
+      <section class="doc-section" id="architecture">
+
+        <span class="eyebrow sky">
+          01 · ARCHITECTURE
+        </span>
+
+
+        <h2>
+          System Architecture
+        </h2>
+
+
+        <p class="lead">
+
+          The system separates native software evaluation from simulated
+          hardware evaluation. A candidate configuration is validated first,
+          then evaluated through the relevant execution paths before the
+          resulting evidence is recorded for the co-design process.
+
+        </p>
+
+
+        <div class="architecture">
+
+
+          <div class="arch-top">
+
+            <div class="arch-node chia">
+
+              <span class="arch-kicker">
+                ORCHESTRATION
+              </span>
+
+              <strong>
+                CHIA
+              </strong>
+
+              <small>
+                Validation · dispatch · recording · search control
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div class="arch-down">
+            ↓
+          </div>
+
+
+          <div class="arch-validation">
+
+            <div class="arch-node">
+
+              <span class="arch-kicker">
+                GATE
+              </span>
+
+              <strong>
+                Configuration Validation
+              </strong>
+
+              <small>
+                Schema + semantic + preflight checks
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div class="arch-down">
+            ↓
+          </div>
+
+
+          <div class="arch-split">
+
+
+            <!-- NATIVE PATH -->
+
+            <div class="arch-path native-path">
+
+              <div class="path-title">
+
+                <span>
+                  SOFTWARE PATH
+                </span>
+
+                <b>
+                  Native Tutor
+                </b>
+
+              </div>
+
+
+              <div class="arch-node native">
+
+                <strong>
+                  Qwen2.5-0.5B
+                </strong>
+
+                <small>
+                  Q5_K_M · llama.cpp · CPU
+                </small>
+
+              </div>
+
+
+              <div class="path-arrow">
+                ↓
+              </div>
+
+
+              <div class="arch-node">
+
+                <strong>
+                  Answer Evaluation
+                </strong>
+
+                <small>
+                  Quality · latency · memory · throughput
+                </small>
+
+              </div>
+
+            </div>
+
+
+            <!-- HARDWARE PATH -->
+
+            <div class="arch-path proxy-path">
+
+              <div class="path-title">
+
+                <span>
+                  HARDWARE PATH
+                </span>
+
+                <b>
+                  gem5 Proxy
+                </b>
+
+              </div>
+
+
+              <div class="arch-node gem5">
+
+                <strong>
+                  Q4 KV Attention
+                </strong>
+
+                <small>
+                  Architectural proxy
+                </small>
+
+              </div>
+
+
+              <div class="path-arrow">
+                ↓
+              </div>
+
+
+              <div class="arch-node">
+
+                <strong>
+                  Hardware Metrics
+                </strong>
+
+                <small>
+                  Cycles · IPC · cache · memory
+                </small>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="arch-down">
+            ↓
+          </div>
+
+
+          <div class="arch-merge">
+
+            <strong>
+              Candidate Record
+            </strong>
+
+            <small>
+              Software metrics + proxy metrics + configuration + provenance
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="callout validation">
+
+          <strong>
+            Architecture boundary
+          </strong>
+
+          <p>
+
+            The native tutor executes the selected Qwen model.
+            The gem5 path executes a focused attention proxy.
+            These are related evaluation paths, but the proxy is not
+            a complete execution of Qwen2.5 inference.
+
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           CHIA LOOP
+      ========================= -->
+
+      <section class="doc-section" id="chia-loop">
+
+        <span class="eyebrow">
+          02 · CHIA
+        </span>
+
+
+        <h2>
+          CHIA Loop
+        </h2>
+
+
+        <p class="lead">
+
+          The current implementation organizes candidate execution through
+          validation, mapping, software and hardware evaluation, verification,
+          and structured result recording. Candidate search may be deterministic
+          or optionally assisted by Gemini, while deterministic validation
+          remains authoritative.
+
+        </p>
+
+
+        <div class="pipeline">
+
+
+          <div class="step">
+
+            <div class="step-num">
+              01
+            </div>
+
+            <div>
+
+              <strong>
+                Candidate configuration
+              </strong>
+
+              <p>
+                A proposed software/hardware configuration enters the
+                experiment pipeline.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="step">
+
+            <div class="step-num">
+              02
+            </div>
+
+            <div>
+
+              <strong>
+                Schema and semantic validation
+              </strong>
+
+              <p>
+                Configuration structure, supported values, cross-knob
+                constraints, and runtime preconditions are checked.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="step">
+
+            <div class="step-num">
+              03
+            </div>
+
+            <div>
+
+              <strong>
+                Runtime mapping
+              </strong>
+
+              <p>
+                Candidate settings are mapped to the native Qwen/llama.cpp
+                and gem5 execution interfaces.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="step">
+
+            <div class="step-num">
+              04
+            </div>
+
+            <div>
+
+              <strong>
+                Native tutor evaluation
+              </strong>
+
+              <p>
+                The selected Qwen2.5 Q5_K_M workload is evaluated through
+                the CPU inference path.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="step">
+
+            <div class="step-num">
+              05
+            </div>
+
+            <div>
+
+              <strong>
+                gem5 proxy evaluation
+              </strong>
+
+              <p>
+                The attention proxy runs under the corresponding hardware
+                configuration.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="step">
+
+            <div class="step-num">
+              06
+            </div>
+
+            <div>
+
+              <strong>
+                Verification and metrics
+              </strong>
+
+              <p>
+                Completion, numerical checks, hardware metrics, application
+                metrics, and correctness evidence are validated.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="step">
+
+            <div class="step-num">
+              07
+            </div>
+
+            <div>
+
+              <strong>
+                Structured record
+              </strong>
+
+              <p>
+                The candidate, requested and executed settings, metrics,
+                versions, hashes, and provenance are persisted.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="step">
+
+            <div class="step-num">
+              08
+            </div>
+
+            <div>
+
+              <strong>
+                Next candidate
+              </strong>
+
+              <p>
+                Search controls determine whether another candidate should
+                be evaluated.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="callout validation">
+
+          <strong>
+            Gemini's role
+          </strong>
+
+          <p>
+
+            Gemini is integrated as an optional candidate proposer.
+            Its output is treated as untrusted structured data and passes
+            the same deterministic schema, design-space, semantic,
+            duplicate, and execution checks as deterministic candidates.
+
+          </p>
+
+        </div>
+
+
+        <div class="callout warning">
+
+          <strong>
+            Production state
+          </strong>
+
+          <p>
+
+            The deterministic full-loop implementation is substantially
+            implemented. Final integrated Qwen + gem5 server acceptance
+            remains an active validation gate.
+
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           EDGE AI TUTOR
+      ========================= -->
+
+      <section class="doc-section" id="edge-tutor">
+
+        <span class="eyebrow mint">
+          03 · WORKLOAD
+        </span>
+
+
+        <h2>
+          Edge AI Tutor
+        </h2>
+
+
+        <p class="lead">
+
+          The tutor represents the application workload being optimized.
+          The initial CHIA workload is intentionally minimal:
+          a student question is passed to a local quantized instruction-tuned
+          model, which generates an answer without retrieval or network access.
+
+        </p>
+
+
+        <div class="grid g2">
+
+
+          <div class="card accent-m">
+
+            <div class="card-icon">
+              Q
+            </div>
+
+            <h3>
+              Qwen model
+            </h3>
+
+            <p>
+
+              The selected baseline is
+              <strong>
+                Qwen2.5-0.5B-Instruct
+              </strong>,
+              a small instruction-tuned model selected for the initial
+              offline CPU co-design workload.
+
+            </p>
+
+          </div>
+
+
+          <div class="card accent-a">
+
+            <div class="card-icon">
+              Q5
+            </div>
+
+            <h3>
+              Q5_K_M baseline
+            </h3>
+
+            <p>
+
+              The selected software baseline uses
+              <strong>
+                Q5_K_M
+              </strong>
+              GGUF quantization with llama.cpp.
+
+            </p>
+
+
+            <div class="spec-list">
+
+              <div>
+
+                <span>
+                  MODEL
+                </span>
+
+                <strong>
+                  Qwen2.5-0.5B-Instruct
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  FORMAT
+                </span>
+
+                <strong>
+                  GGUF · Q5_K_M
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  RUNTIME
+                </span>
+
+                <strong>
+                  llama.cpp / CPU
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  THREADS
+                </span>
+
+                <strong>
+                  4
+                </strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="card accent-s">
+
+            <div class="card-icon">
+              LC
+            </div>
+
+            <h3>
+              Runtime
+            </h3>
+
+            <p>
+
+              The current workload uses llama.cpp for local CPU inference.
+              The verified model artifact is SHA-256 pinned and runtime
+              preflight checks the expected model identity.
+
+            </p>
+
+          </div>
+
+
+          <div class="card accent-v">
+
+            <div class="card-icon">
+              R
+            </div>
+
+            <h3>
+              RAG scope
+            </h3>
+
+            <p>
+
+              RAG is currently
+              <strong>
+                OUT
+              </strong>
+              of the initial CHIA baseline. Retrieval is not part of the
+              inference path being co-designed.
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- QUANTIZATION DISTINCTION -->
+
+        <div class="quantization-map">
+
+
+          <div class="quant-box tutor-quant">
+
+            <div class="quant-badge">
+              SOFTWARE
+            </div>
+
+            <strong>
+              Q5_K_M
+            </strong>
+
+            <span>
+              Qwen2.5-0.5B-Instruct
+            </span>
+
+            <small>
+              Real model used by the Edge Tutor workload.
+            </small>
+
+          </div>
+
+
+          <div class="quant-connector">
+
+            <span>
+              ≠
+            </span>
+
+            <small>
+              different roles
+            </small>
+
+          </div>
+
+
+          <div class="quant-box proxy-quant">
+
+            <div class="quant-badge">
+              GEM5 PROXY
+            </div>
+
+            <strong>
+              Q4 KV
+            </strong>
+
+            <span>
+              Attention kernel
+            </span>
+
+            <small>
+              Proxy representation used for architectural exploration.
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="callout">
+
+          <strong>
+            Important quantization distinction
+          </strong>
+
+          <p>
+
+            <strong>
+              Q5_K_M
+            </strong>
+            is the quantization of the actual tutor model.
+            <strong>
+              Q4
+            </strong>
+            in the gem5 path refers to the proxy's quantized KV-cache
+            representation. These are separate design choices and should
+            not be interpreted as the tutor model being Q4.
+
+          </p>
+
+        </div>
+
+
+        <div class="callout warning">
+
+          <strong>
+            Quality vs. systems cost
+          </strong>
+
+          <p>
+
+            The Q5_K_M baseline was selected after controlled comparison
+            with smaller quantized alternatives. The selection emphasized
+            factual answer quality together with artifact size, runtime
+            behavior, and CPU resource pressure.
+
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           GEM5 PROXY
+      ========================= -->
+
+      <section class="doc-section" id="gem5-proxy">
+
+        <span class="eyebrow">
+          04 · SIMULATION
+        </span>
+
+
+        <h2>
+          gem5 Proxy
+        </h2>
+
+
+        <p class="lead">
+
+          Full Qwen inference is not currently simulated directly in gem5.
+          Instead, the project uses an attention-focused architectural proxy
+          to study hardware behavior under controlled configurations.
+
+        </p>
+
+
+        <div class="callout">
+
+          <strong>
+            Why use a proxy?
+          </strong>
+
+          <p>
+
+            Simulating complete modern LLM inference at detailed architectural
+            level can be expensive. A focused attention proxy allows the
+            project to explore cache, execution, and memory behavior while
+            keeping experiments computationally manageable.
+
+          </p>
+
+        </div>
+
+
+        <!-- PROXY VISUAL -->
+
+        <div class="proxy-visual">
+
+
+          <div class="proxy-context">
+
+            <div class="proxy-title">
+
+              <span>
+                CONTEXT
+              </span>
+
+              <strong>
+                KV Cache
+              </strong>
+
+            </div>
+
+
+            <div class="kv-row">
+
+              <i></i>
+              <i></i>
+              <i></i>
+              <i></i>
+              <i></i>
+              <i></i>
+
+              <span>
+                …
+              </span>
+
+            </div>
+
+
+            <small>
+              Quantized KV representation used by the proxy.
+            </small>
+
+          </div>
+
+
+          <div class="proxy-arrow">
+            →
+          </div>
+
+
+          <div class="proxy-attention">
+
+            <div class="proxy-title">
+
+              <span>
+                COMPUTE
+              </span>
+
+              <strong>
+                Attention Kernel
+              </strong>
+
+            </div>
+
+
+            <div class="attention-grid">
+
+              <span>
+                Q
+              </span>
+
+              <span>
+                K
+              </span>
+
+              <span>
+                V
+              </span>
+
+              <b>
+                ×
+              </b>
+
+              <b>
+                +
+              </b>
+
+              <span>
+                Q4
+              </span>
+
+            </div>
+
+
+            <small>
+              Focused workload executed in gem5.
+            </small>
+
+          </div>
+
+
+          <div class="proxy-arrow">
+            →
+          </div>
+
+
+          <div class="proxy-result">
+
+            <div class="proxy-title">
+
+              <span>
+                MEASURE
+              </span>
+
+              <strong>
+                Hardware Behaviour
+              </strong>
+
+            </div>
+
+
+            <div class="metric-mini">
+
+              <span>
+                Cycles
+              </span>
+
+              <span>
+                IPC
+              </span>
+
+              <span>
+                L1/L2
+              </span>
+
+              <span>
+                DRAM
+              </span>
+
+            </div>
+
+
+            <small>
+              Architectural measurements recorded by the experiment.
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="compare">
+
+
+          <div class="compare-box yes">
+
+            <div class="compare-title">
+              Proxy models
+            </div>
+
+            <ul>
+
+              <li>
+                Attention-related computation
+              </li>
+
+              <li>
+                Quantized KV representation
+              </li>
+
+              <li>
+                Query heads
+              </li>
+
+              <li>
+                KV heads
+              </li>
+
+              <li>
+                Head dimension
+              </li>
+
+              <li>
+                Sequence length
+              </li>
+
+              <li>
+                Relevant architectural parameters
+              </li>
+
+            </ul>
+
+          </div>
+
+
+          <div class="compare-box no">
+
+            <div class="compare-title">
+              Proxy does not model
+            </div>
+
+            <ul>
+
+              <li>
+                Full Qwen inference
+              </li>
+
+              <li>
+                Complete transformer stack
+              </li>
+
+              <li>
+                FFN / MLP layers
+              </li>
+
+              <li>
+                Tokenization
+              </li>
+
+              <li>
+                Sampling
+              </li>
+
+              <li>
+                Complete llama.cpp runtime behavior
+              </li>
+
+            </ul>
+
+          </div>
+
+        </div>
+
+
+        <h3 style="margin-top:30px;">
+          Current proxy configuration
+        </h3>
+
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Parameter
+                </th>
+
+                <th>
+                  Current value
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Context
+                  </strong>
+                </td>
+
+                <td>
+                  512 tokens
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Defined
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Query heads
+                  </strong>
+                </td>
+
+                <td>
+                  4
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Defined
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    KV heads
+                  </strong>
+                </td>
+
+                <td>
+                  2
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Defined
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Head dimension
+                  </strong>
+                </td>
+
+                <td>
+                  32
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Defined
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Layers
+                  </strong>
+                </td>
+
+                <td>
+                  1
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Defined
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    KV format
+                  </strong>
+                </td>
+
+                <td>
+                  Q4
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Defined
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Proxy threads
+                  </strong>
+                </td>
+
+                <td>
+                  2
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Defined
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Repetitions
+                  </strong>
+                </td>
+
+                <td>
+                  10
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Defined
+                  </span>
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <div class="callout validation">
+
+          <strong>
+            Real model vs. proxy
+          </strong>
+
+          <p>
+
+            The verified Qwen model has 14 query heads, 2 KV heads,
+            head dimension 64, and 24 layers. The current proxy uses
+            4 query heads, 2 KV heads, head dimension 32, and 1 layer.
+            The proxy therefore represents a focused architectural workload,
+            not an exact reproduction of the full Qwen model.
+
+          </p>
+
+        </div>
+
+
+        <div class="callout warning">
+
+          <strong>
+            Proxy validity
+          </strong>
+
+          <p>
+
+            Proxy fidelity and calibration remain active validation areas.
+            Proxy measurements should not be interpreted as measurements
+            of complete Qwen inference unless the relationship has been
+            explicitly validated.
+
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           DESIGN SPACE
+      ========================= -->
+
+      <section class="doc-section" id="design-space">
+
+        <span class="eyebrow coral">
+          05 · DESIGN SPACE
+        </span>
+
+
+        <h2>
+          HW/SW Design Space
+        </h2>
+
+
+        <p class="lead">
+
+          The active design space contains selected software and hardware
+          knobs. Some parameters are fixed to preserve a controlled baseline,
+          while others are explored by the current campaign.
+
+        </p>
+
+
+        <!-- VISUAL KNOBS -->
+
+        <div class="knob-board">
+
+
+          <div class="knob-group">
+
+            <div class="knob-heading">
+
+              <span class="knob-dot software"></span>
+
+              SOFTWARE
+
+            </div>
+
+
+            <div class="knob">
+
+              <span>
+                Model
+              </span>
+
+              <strong>
+                Qwen2.5-0.5B
+              </strong>
+
+            </div>
+
+
+            <div class="knob selected">
+
+              <span>
+                Quantization
+              </span>
+
+              <strong>
+                Q5_K_M
+              </strong>
+
+            </div>
+
+
+            <div class="knob">
+
+              <span>
+                Temperature
+              </span>
+
+              <strong>
+                0.0 · 0.2 · 0.5
+              </strong>
+
+            </div>
+
+
+            <div class="knob">
+
+              <span>
+                Max output
+              </span>
+
+              <strong>
+                128 · 256 · 384
+              </strong>
+
+            </div>
+
+
+            <div class="knob">
+
+              <span>
+                Threads
+              </span>
+
+              <strong>
+                4 · fixed
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="knob-group">
+
+            <div class="knob-heading">
+
+              <span class="knob-dot hardware"></span>
+
+              HARDWARE
+
+            </div>
+
+
+            <div class="knob">
+
+              <span>
+                CPU
+              </span>
+
+              <strong>
+                TimingSimple / O3
+              </strong>
+
+            </div>
+
+
+            <div class="knob">
+
+              <span>
+                Frequency
+              </span>
+
+              <strong>
+                1 · 2 · 3 · 4 GHz
+              </strong>
+
+            </div>
+
+
+            <div class="knob">
+
+              <span>
+                Issue width
+              </span>
+
+              <strong>
+                1 · 2 · 4
+              </strong>
+
+            </div>
+
+
+            <div class="knob">
+
+              <span>
+                L1D
+              </span>
+
+              <strong>
+                16 · 32 · 64 KiB
+              </strong>
+
+            </div>
+
+
+            <div class="knob">
+
+              <span>
+                L2
+              </span>
+
+              <strong>
+                256 · 512 · 1024 KiB
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Type
+                </th>
+
+                <th>
+                  Parameter
+                </th>
+
+                <th>
+                  Values / Range
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    SW
+                  </strong>
+                </td>
+
+                <td>
+                  Model
+                </td>
+
+                <td>
+                  Qwen2.5-0.5B-Instruct
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Fixed
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    SW
+                  </strong>
+                </td>
+
+                <td>
+                  Quantization
+                </td>
+
+                <td>
+                  Q5_K_M
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Selected baseline
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    SW
+                  </strong>
+                </td>
+
+                <td>
+                  Temperature
+                </td>
+
+                <td>
+                  0.0 / 0.2 / 0.5
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Active search
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    SW
+                  </strong>
+                </td>
+
+                <td>
+                  Max output tokens
+                </td>
+
+                <td>
+                  128 / 256 / 384
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Active search
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    SW
+                  </strong>
+                </td>
+
+                <td>
+                  CPU threads
+                </td>
+
+                <td>
+                  4
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Fixed
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    SW
+                  </strong>
+                </td>
+
+                <td>
+                  Batch size
+                </td>
+
+                <td>
+                  1
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Fixed
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    HW
+                  </strong>
+                </td>
+
+                <td>
+                  CPU model
+                </td>
+
+                <td>
+                  TimingSimpleCPU / RiscvO3CPU
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Active
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    HW
+                  </strong>
+                </td>
+
+                <td>
+                  Frequency
+                </td>
+
+                <td>
+                  1 / 2 / 3 / 4 GHz
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Active
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    HW
+                  </strong>
+                </td>
+
+                <td>
+                  Issue width
+                </td>
+
+                <td>
+                  1 / 2 / 4
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Active
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    HW
+                  </strong>
+                </td>
+
+                <td>
+                  L1D size
+                </td>
+
+                <td>
+                  16 / 32 / 64 KiB
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Active
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    HW
+                  </strong>
+                </td>
+
+                <td>
+                  L1D associativity
+                </td>
+
+                <td>
+                  2 / 4 / 8
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Active
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    HW
+                  </strong>
+                </td>
+
+                <td>
+                  L2 size
+                </td>
+
+                <td>
+                  256 / 512 / 1024 KiB
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Active
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    HW
+                  </strong>
+                </td>
+
+                <td>
+                  L2 associativity
+                </td>
+
+                <td>
+                  4 / 8 / 16
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Active
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    HW
+                  </strong>
+                </td>
+
+                <td>
+                  Core count
+                </td>
+
+                <td>
+                  2
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Fixed
+                  </span>
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <div class="callout warning">
+
+          <strong>
+            Controlled parameters
+          </strong>
+
+          <p>
+
+            The initial campaign fixes several parameters to keep the
+            workload interpretable. For example, the proxy remains at
+            two simulated cores and its attention shape is fixed while
+            proxy fidelity is being characterized.
+
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           METRICS
+      ========================= -->
+
+      <section class="doc-section" id="metrics">
+
+        <span class="eyebrow mint">
+          06 · MEASUREMENT
+        </span>
+
+
+        <h2>
+          Metrics & Objectives
+        </h2>
+
+
+        <p class="lead">
+
+          The evaluation combines application-level measurements from the
+          native tutor with architectural measurements from the gem5 proxy.
+          These measurements have different scopes and should not be treated
+          as interchangeable.
+
+        </p>
+
+
+        <div class="metric-strip">
+
+
+          <div class="metric-card">
+
+            <span class="metric-symbol">
+              ↯
+            </span>
+
+            <strong>
+              Latency
+            </strong>
+
+            <small>
+              Native software response time
+            </small>
+
+          </div>
+
+
+          <div class="metric-card">
+
+            <span class="metric-symbol">
+              ◫
+            </span>
+
+            <strong>
+              Memory
+            </strong>
+
+            <small>
+              Observed runtime memory pressure
+            </small>
+
+          </div>
+
+
+          <div class="metric-card">
+
+            <span class="metric-symbol">
+              ✓
+            </span>
+
+            <strong>
+              Quality
+            </strong>
+
+            <small>
+              Required-concept coverage
+            </small>
+
+          </div>
+
+
+          <div class="metric-card">
+
+            <span class="metric-symbol">
+              ◌
+            </span>
+
+            <strong>
+              Cycles
+            </strong>
+
+            <small>
+              Simulated architectural work
+            </small>
+
+          </div>
+
+
+          <div class="metric-card">
+
+            <span class="metric-symbol">
+              ↗
+            </span>
+
+            <strong>
+              IPC
+            </strong>
+
+            <small>
+              Instructions per cycle
+            </small>
+
+          </div>
+
+
+          <div class="metric-card">
+
+            <span class="metric-symbol">
+              ▦
+            </span>
+
+            <strong>
+              Cache
+            </strong>
+
+            <small>
+              L1 / L2 behaviour
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="grid g2">
+
+
+          <div class="card accent-m">
+
+            <div class="card-icon">
+              SW
+            </div>
+
+            <h3>
+              Native tutor
+            </h3>
+
+            <p>
+              Current application-level measurements include:
+            </p>
+
+            <ul class="muted">
+
+              <li>
+                Answer quality
+              </li>
+
+              <li>
+                Latency
+              </li>
+
+              <li>
+                Completion tokens / tokens per second
+              </li>
+
+              <li>
+                Baseline and peak RSS
+              </li>
+
+              <li>
+                Model artifact size
+              </li>
+
+            </ul>
+
+          </div>
+
+
+          <div class="card accent-a">
+
+            <div class="card-icon">
+              HW
+            </div>
+
+            <h3>
+              gem5
+            </h3>
+
+            <p>
+              Architectural measurements include:
+            </p>
+
+            <ul class="muted">
+
+              <li>
+                Simulation time
+              </li>
+
+              <li>
+                Instructions
+              </li>
+
+              <li>
+                Cycles
+              </li>
+
+              <li>
+                CPI / IPC
+              </li>
+
+              <li>
+                L1 instruction/data miss rates
+              </li>
+
+              <li>
+                L2 miss rate
+              </li>
+
+              <li>
+                DRAM traffic and bandwidth
+              </li>
+
+            </ul>
+
+          </div>
+
+        </div>
+
+
+        <div class="callout validation">
+
+          <strong>
+            Quality metric
+          </strong>
+
+          <p>
+
+            The current deterministic evaluation uses required-concept
+            coverage as an initial reproducible quality signal.
+            It is not a human judgment and does not establish educational
+            effectiveness. Larger held-out evaluation and human review
+            remain future validation work.
+
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           OPTIMIZATION
+      ========================= -->
+
+      <section class="doc-section" id="optimization">
+
+        <span class="eyebrow violet">
+          07 · OPTIMIZATION
+        </span>
+
+
+        <h2>
+          Optimization Strategy
+        </h2>
+
+
+        <p class="lead">
+
+          The project treats hardware/software configuration as a
+          multi-objective search problem. The active implementation places
+          deterministic validation and execution policy around the search,
+          while Gemini can optionally propose candidate changes.
+
+        </p>
+
+
+        <div class="grid g3">
+
+
+          <div class="card accent-v">
+
+            <div class="card-icon">
+              P
+            </div>
+
+            <h3>
+              Pareto analysis
+            </h3>
+
+            <p>
+
+              Candidate configurations can be compared across multiple
+              objectives rather than reducing every experiment to one
+              independent metric.
+
+            </p>
+
+          </div>
+
+
+          <div class="card accent-s">
+
+            <div class="card-icon">
+              C
+            </div>
+
+            <h3>
+              Constraints
+            </h3>
+
+            <p>
+
+              Invalid or infeasible configurations are rejected before
+              expensive evaluation.
+
+            </p>
+
+          </div>
+
+
+          <div class="card accent-a">
+
+            <div class="card-icon">
+              ↔
+            </div>
+
+            <h3>
+              Candidate search
+            </h3>
+
+            <p>
+
+              Deterministic candidates are supported by default.
+              Gemini may optionally propose candidates inside the reviewed
+              search space.
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="callout">
+
+          <strong>
+            Search authority
+          </strong>
+
+          <p>
+
+            Gemini does not decide whether an invalid candidate executes.
+            Candidate iteration limits, duplicate handling, repeated-failure
+            stopping, numerical checks, and policy validation remain
+            deterministic program logic.
+
+          </p>
+
+        </div>
+
+
+        <div class="callout warning">
+
+          <strong>
+            Objective policy
+          </strong>
+
+          <p>
+
+            The exact weighting and normalization of objectives should be
+            reported from the active optimization policy. Where a final
+            policy value is not fixed, it should remain marked
+            <strong>TBD / Under validation</strong>.
+
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           METHODOLOGY
+      ========================= -->
+
+      <section class="doc-section" id="methodology">
+
+        <span class="eyebrow sky">
+          08 · METHODOLOGY
+        </span>
+
+
+        <h2>
+          Experiment Methodology
+        </h2>
+
+
+        <p class="lead">
+
+          Experiments are structured so that differences between candidates
+          can be attributed to the variables being studied while preserving
+          the provenance required to reproduce the result.
+
+        </p>
+
+
+        <div class="grid g2">
+
+
+          <div class="card">
+
+            <h3>
+              Controlled variables
+            </h3>
+
+            <p>
+
+              Model identity, Q5_K_M quantization, runtime configuration,
+              fixed hardware parameters, proxy shape, seeds, and other
+              controlled settings are recorded with candidate results.
+
+            </p>
+
+          </div>
+
+
+          <div class="card">
+
+            <h3>
+              Candidate variables
+            </h3>
+
+            <p>
+
+              The active software search includes temperature and maximum
+              output tokens. The hardware search includes CPU model,
+              frequency, issue width, L1D and L2 parameters.
+
+            </p>
+
+          </div>
+
+
+          <div class="card">
+
+            <h3>
+              Repeated measurements
+            </h3>
+
+            <p>
+
+              Native benchmark and proxy experiments use explicit repetition
+              settings where defined by the experiment contract.
+
+            </p>
+
+          </div>
+
+
+          <div class="card">
+
+            <h3>
+              Proxy calibration
+            </h3>
+
+            <p>
+
+              Native context sweeps, gem5 proxy sweeps, sensitivity cases,
+              normalized trends, and correlation analysis are used to study
+              whether the proxy captures useful architectural behavior.
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="callout validation">
+
+          <strong>
+            Calibration protocol
+          </strong>
+
+          <p>
+
+            The current calibration sweep covers context lengths
+            128, 256, 512, 1024, and 2048 tokens. Calibration retains
+            finite raw numerical errors even when reviewed tolerance is
+            exceeded so that the complete sweep can be analyzed.
+
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           TRACE
+      ========================= -->
+
+      <section class="doc-section" id="trace">
+
+        <span class="eyebrow">
+          09 · TRACE
+        </span>
+
+
+        <h2>
+          Trace One Experiment
+        </h2>
+
+
+        <p class="lead">
+
+          The following example shows a verified gem5 proxy experiment.
+          It is intentionally labeled as a proxy experiment rather than
+          a complete Qwen inference run.
+
+        </p>
+
+
+        <div class="experiment-card">
+
+
+          <div class="experiment-header">
+
+            <div>
+
+              <span>
+                EXPERIMENT
+              </span>
+
+              <strong>
+                attn-q4-baseline-001
+              </strong>
+
+            </div>
+
+
+            <span class="status confirmed">
+              Completed
+            </span>
+
+          </div>
+
+
+          <div class="experiment-grid">
+
+
+            <div>
+
+              <span>
+                CPU
+              </span>
+
+              <strong>
+                RiscvO3CPU
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                CORES
+              </span>
+
+              <strong>
+                2
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                FREQUENCY
+              </span>
+
+              <strong>
+                1 GHz
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                L1D
+              </span>
+
+              <strong>
+                64 KiB
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                L2
+              </span>
+
+              <strong>
+                1024 KiB
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                PROXY
+              </span>
+
+              <strong>
+                Q4 KV
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="trace">
+
+
+          <div class="trace-step">
+
+            <div class="dot">
+              01
+            </div>
+
+            <div>
+
+              <strong>
+                Candidate configuration
+              </strong>
+
+              <small>
+                The Q4 attention proxy and two-core hardware configuration
+                are defined by the experiment contract.
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div class="trace-step">
+
+            <div class="dot">
+              02
+            </div>
+
+            <div>
+
+              <strong>
+                Configuration validation
+              </strong>
+
+              <small>
+                The experiment settings are checked against schema and
+                semantic constraints.
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div class="trace-step">
+
+            <div class="dot">
+              03
+            </div>
+
+            <div>
+
+              <strong>
+                Workload build
+              </strong>
+
+              <small>
+                The attention workload is built in the gem5/toolchain
+                container environment.
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div class="trace-step">
+
+            <div class="dot">
+              04
+            </div>
+
+            <div>
+
+              <strong>
+                gem5 execution
+              </strong>
+
+              <small>
+                The proxy runs on the configured simulated two-core system.
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div class="trace-step">
+
+            <div class="dot">
+              05
+            </div>
+
+            <div>
+
+              <strong>
+                Metrics extraction
+              </strong>
+
+              <small>
+                Simulation statistics are converted into structured
+                hardware metrics.
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div class="trace-step">
+
+            <div class="dot">
+              06
+            </div>
+
+            <div>
+
+              <strong>
+                Verification
+              </strong>
+
+              <small>
+                Completion, shape, numerical, and metric checks are applied.
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div class="trace-step">
+
+            <div class="dot">
+              07
+            </div>
+
+            <div>
+
+              <strong>
+                Result record
+              </strong>
+
+              <small>
+                Configuration, metrics, provenance, and execution evidence
+                are associated with the experiment.
+              </small>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <h3 style="margin-top:30px;">
+          Verified proxy measurements
+        </h3>
+
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Metric
+                </th>
+
+                <th>
+                  Value
+                </th>
+
+                <th>
+                  Scope
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Simulated time
+                  </strong>
+                </td>
+
+                <td>
+                  0.016121 s
+                </td>
+
+                <td>
+                  gem5 proxy
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Instructions
+                  </strong>
+                </td>
+
+                <td>
+                  31,245,140
+                </td>
+
+                <td>
+                  gem5 proxy
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Aggregate IPC
+                  </strong>
+                </td>
+
+                <td>
+                  1.9396
+                </td>
+
+                <td>
+                  gem5 proxy
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    L1D miss rate
+                  </strong>
+                </td>
+
+                <td>
+                  0.016808 / 0.019031
+                </td>
+
+                <td>
+                  Per simulated core
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    L2 miss rate
+                  </strong>
+                </td>
+
+                <td>
+                  0.699803
+                </td>
+
+                <td>
+                  gem5 proxy
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    DRAM bytes read
+                  </strong>
+                </td>
+
+                <td>
+                  182,016
+                </td>
+
+                <td>
+                  gem5 proxy
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Host runtime
+                  </strong>
+                </td>
+
+                <td>
+                  181.29 s
+                </td>
+
+                <td>
+                  Simulation host
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <div class="callout warning">
+
+          <strong>
+            Measurement scope
+          </strong>
+
+          <p>
+
+            These values describe the Q4 attention proxy execution.
+            They are not measurements of end-to-end Qwen2.5 Q5_K_M inference.
+
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           RESULTS
+      ========================= -->
+
+      <section class="doc-section" id="results">
+
+        <span class="eyebrow">
+          10 · RESULTS
+        </span>
+
+
+        <h2>
+          Results
+        </h2>
+
+
+        <p class="lead">
+
+          This section separates verified evidence from results that are
+          still under validation. No unsupported optimization winner or
+          end-to-end performance claim is presented.
+
+        </p>
+
+
+        <div class="results-status">
+
+
+          <div class="result-state">
+
+            <span class="result-icon">
+              ✓
+            </span>
+
+            <div>
+
+              <strong>
+                Q5 tutor baseline selected
+              </strong>
+
+              <small>
+                Qwen2.5-0.5B-Instruct Q5_K_M is the current software baseline.
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div class="result-state">
+
+            <span class="result-icon">
+              ✓
+            </span>
+
+            <div>
+
+              <strong>
+                Q4 proxy baseline executed
+              </strong>
+
+              <small>
+                The attention proxy has verified gem5 execution evidence.
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div class="result-state validation-state">
+
+            <span class="result-icon">
+              !
+            </span>
+
+            <div>
+
+              <strong>
+                Integrated Qwen + gem5 validation
+              </strong>
+
+              <small>
+                Final combined acceptance remains under validation.
+              </small>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="grid g2">
+
+
+          <div class="card accent-m">
+
+            <h3>
+              Q5 model selection evidence
+            </h3>
+
+            <p>
+
+              In the controlled 20-question comparison, Qwen2.5-0.5B
+              Q5_K_M achieved a 90.0% manual factual score and was selected
+              as the initial software baseline.
+
+            </p>
+
+          </div>
+
+
+          <div class="card accent-s">
+
+            <h3>
+              Proxy execution evidence
+            </h3>
+
+            <p>
+
+              The current Q4 attention proxy has completed verified gem5
+              execution under the defined two-core baseline configuration.
+
+            </p>
+
+          </div>
+
+
+          <div class="card accent-a">
+
+            <h3>
+              Calibration evidence
+            </h3>
+
+            <p>
+
+              The proxy-fidelity protocol includes native and gem5 context
+              sweeps, hardware sensitivity cases, normalized trends,
+              and correlation analysis.
+
+            </p>
+
+          </div>
+
+
+          <div class="card accent-c">
+
+            <h3>
+              Integrated campaign
+            </h3>
+
+            <p>
+
+              The final Qwen/llama.cpp + gem5 combined acceptance run has
+              not yet been completed. It remains an active validation gate.
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="callout validation">
+
+          <strong>
+            Current calibration observation
+          </strong>
+
+          <p>
+
+            The first 128-token server simulation produced finite numerical
+            errors but exceeded the reviewed Q4 tolerance:
+            maximum absolute error 0.010727912 and MSE 0.000012264.
+            The production loop remains fail-closed when tolerance is
+            exceeded; calibration records the violation and continues the
+            sweep for analysis.
+
+          </p>
+
+        </div>
+
+
+        <div class="callout warning">
+
+          <strong>
+            What is intentionally not shown
+          </strong>
+
+          <p>
+
+            No broader optimization ranking, Pareto winner, or final
+            Qwen-plus-hardware performance conclusion is presented until
+            the integrated campaign and validation evidence are complete.
+
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           LIMITATIONS
+      ========================= -->
+
+      <section class="doc-section" id="limitations">
+
+        <span class="eyebrow coral">
+          11 · VALIDITY
+        </span>
+
+
+        <h2>
+          Validity & Limitations
+        </h2>
+
+
+        <p class="lead">
+
+          Explicitly documenting the boundaries of the current methodology
+          is essential for interpreting the results correctly.
+
+        </p>
+
+
+        <div class="grid g2">
+
+
+          <div class="card accent-c">
+
+            <h3>
+              Proxy scope
+            </h3>
+
+            <p>
+
+              The current gem5 workload is an attention-focused proxy and
+              should not be presented as a complete simulation of Qwen
+              inference.
+
+            </p>
+
+          </div>
+
+
+          <div class="card accent-c">
+
+            <h3>
+              Unmodeled components
+            </h3>
+
+            <p>
+
+              FFN/MLP computation, tokenization, sampling, and complete
+              llama.cpp runtime behavior are outside the current proxy scope.
+
+            </p>
+
+          </div>
+
+
+          <div class="card accent-a">
+
+            <h3>
+              Calibration status
+            </h3>
+
+            <p>
+
+              Proxy calibration is still being evaluated. The first
+              128-token case exceeded the reviewed numerical tolerance,
+              so the proxy relationship remains under validation.
+
+            </p>
+
+          </div>
+
+
+          <div class="card accent-v">
+
+            <h3>
+              Different timing meanings
+            </h3>
+
+            <p>
+
+              Native application latency, simulated time, and simulator
+              host runtime are distinct measurements and must not be
+              compared as though they represent the same quantity.
+
+            </p>
+
+          </div>
+
+
+          <div class="card accent-s">
+
+            <h3>
+              Model vs. proxy quantization
+            </h3>
+
+            <p>
+
+              Q5_K_M is the selected real-model quantization.
+              Q4 is used in the proxy's KV-cache representation.
+              These are separate representations.
+
+            </p>
+
+          </div>
+
+
+          <div class="card accent-v">
+
+            <h3>
+              Evaluation quality
+            </h3>
+
+            <p>
+
+              Required-concept coverage provides a deterministic initial
+              quality signal. It is not a substitute for larger held-out
+              evaluation or human assessment.
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="callout warning">
+
+          <strong>
+            Interpretation rule
+          </strong>
+
+          <p>
+
+            Proxy results describe the architectural behavior represented
+            by the proxy. They should not automatically be interpreted as
+            end-to-end tutor performance.
+
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           REPRODUCIBILITY
+      ========================= -->
+
+      <section class="doc-section" id="reproducibility">
+
+        <span class="eyebrow mint">
+          12 · REPRODUCIBILITY
+        </span>
+
+
+        <h2>
+          Reproducibility
+        </h2>
+
+
+        <p class="lead">
+
+          A technical reviewer should be able to identify the software,
+          configuration, environment, and experiment settings required to
+          reproduce the reported results.
+
+        </p>
+
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Item
+                </th>
+
+                <th>
+                  Current information
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Repository
+                  </strong>
+                </td>
+
+                <td>
+                  SocialLab-AI / CHIA-Project
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Defined
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Supported entrypoint
+                  </strong>
+                </td>
+
+                <td>
+                  <code>
+                    scripts/run_experiment.py
+                  </code>
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Defined
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Tutor model
+                  </strong>
+                </td>
+
+                <td>
+                  Qwen2.5-0.5B-Instruct Q5_K_M
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Verified
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Model artifact
+                  </strong>
+                </td>
+
+                <td>
+                  SHA-256 pinned GGUF artifact
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Verified
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Runtime
+                  </strong>
+                </td>
+
+                <td>
+                  llama.cpp / CPU
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Verified
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    gem5
+                  </strong>
+                </td>
+
+                <td>
+                  Docker-based gem5 execution
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Verified path
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Configuration validation
+                  </strong>
+                </td>
+
+                <td>
+                  Schema + semantic + negative tests
+                </td>
+
+                <td>
+                  <span class="status confirmed">
+                    Passing
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <strong>
+                    Integrated acceptance
+                  </strong>
+                </td>
+
+                <td>
+                  Final Qwen + gem5 server campaign
+                </td>
+
+                <td>
+                  <span class="status tbd">
+                    Under validation
+                  </span>
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <h3 style="margin-top:30px;">
+          Validation commands
+        </h3>
+
+
+        <pre><code>uv sync --extra cluster
+
+uv run pytest -q -m 'not scheduling'
+
+uv run python scripts/validate_configs.py
+
+uv run python scripts/run_experiment.py --validate-only
+
+$env:CHIA_RUN_SCHEDULING_TESTS='1'
+
+uv run pytest -q tests/test_scheduling.py</code></pre>
+
+
+        <div class="callout">
+
+          <strong>
+            Local validation vs. server execution
+          </strong>
+
+          <p>
+
+            Local schema and scheduling tests verify software contracts and
+            orchestration behavior. They should not be confused with a
+            completed remote model/gem5 experiment on the Adam/YSF cluster.
+
+          </p>
+
+        </div>
+
+
+        <h3 style="margin-top:30px;">
+          Reproducibility metadata
+        </h3>
+
+
+        <div class="grid g2">
+
+
+          <div class="card">
+
+            <h3>
+              Software provenance
+            </h3>
+
+            <p>
+
+              Experiment records retain git revision, dirty status,
+              package versions, model SHA-256, llama.cpp build information,
+              and relevant source hashes.
+
+            </p>
+
+          </div>
+
+
+          <div class="card">
+
+            <h3>
+              Hardware provenance
+            </h3>
+
+            <p>
+
+              Hardware records retain requested and resolved configuration,
+              simulator image identity, executable information, and
+              simulation metrics.
+
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           REFERENCES
+      ========================= -->
+
+      <section class="doc-section" id="references">
+
+        <span class="eyebrow sky">
+          13 · REFERENCES
+        </span>
+
+
+        <h2>
+          References
+        </h2>
+
+
+        <p class="lead">
+
+          The project relies on its configuration contracts, implementation
+          records, model artifacts, runtime tools, and architectural
+          simulation framework.
+
+        </p>
+
+
+        <div class="grid g2">
+
+
+          <div class="card">
+
+            <h3>
+              CHIA Project
+            </h3>
+
+            <p>
+
+              Project architecture, contracts, orchestration, experiment
+              schemas, and implementation documentation.
+
+            </p>
+
+            <p style="margin-top:10px;">
+
+              <a href="https://github.com/SocialLab-AI/CHIA-Project"
+                 target="_blank"
+                 rel="noopener">
+
+                GitHub repository →
+
+              </a>
+
+            </p>
+
+          </div>
+
+
+          <div class="card">
+
+            <h3>
+              Qwen2.5
+            </h3>
+
+            <p>
+
+              Qwen2.5-0.5B-Instruct provides the selected Edge Tutor
+              software baseline.
+
+            </p>
+
+            <p style="margin-top:10px;">
+
+              <a href="https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct"
+                 target="_blank"
+                 rel="noopener">
+
+                Model documentation →
+
+              </a>
+
+            </p>
+
+          </div>
+
+
+          <div class="card">
+
+            <h3>
+              llama.cpp
+            </h3>
+
+            <p>
+
+              Local CPU inference runtime used for the selected GGUF
+              Qwen workload.
+
+            </p>
+
+            <p style="margin-top:10px;">
+
+              <a href="https://github.com/ggml-org/llama.cpp"
+                 target="_blank"
+                 rel="noopener">
+
+                Runtime repository →
+
+              </a>
+
+            </p>
+
+          </div>
+
+
+          <div class="card">
+
+            <h3>
+              gem5
+            </h3>
+
+            <p>
+
+              Architectural simulation framework used by the attention
+              proxy execution path.
+
+            </p>
+
+            <p style="margin-top:10px;">
+
+              <a href="https://www.gem5.org/"
+                 target="_blank"
+                 rel="noopener">
+
+                gem5 documentation →
+
+              </a>
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="callout validation">
+
+          <strong>
+            Source hierarchy
+          </strong>
+
+          <p>
+
+            Project-specific configuration files, experiment contracts,
+            implementation records, and verified runtime evidence take
+            precedence over generic documentation when describing the
+            current Edge Tutor implementation.
+
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           FOOTER
+      ========================= -->
+
+      <footer>
+
+        <strong>
+          Edge Tutor
+        </strong>
+
+
+        <p>
+
+          Technical documentation for the Edge AI Tutor +
+          CHIA hardware/software co-design project.
+
+        </p>
+
+
+        <p>
+
+          <a href="index.html">
+            ← Return to the main Edge Tutor website
+          </a>
+
+        </p>
+
+      </footer>
+
+    </main>
+
+  </div>
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================= -->
+
+  <script>
+
+
+    const sidebar =
+      document.getElementById("sidebar");
+
+
+    const menuBtn =
+      document.getElementById("menuBtn");
+
+
+    const sideLinks =
+      document.querySelectorAll(".side-link");
+
+
+    /*
+     * Mobile documentation menu
+     */
+
+    menuBtn.addEventListener("click", () => {
+
+      sidebar.classList.toggle("open");
+
+    });
+
+
+    /*
+     * Close mobile menu after selecting a section
+     */
+
+    sideLinks.forEach(link => {
+
+      link.addEventListener("click", () => {
+
+        if(window.innerWidth <= 900){
+
+          sidebar.classList.remove("open");
+
+        }
+
+      });
+
+    });
+
+
+    /*
+     * Highlight the documentation section currently visible.
+     */
+
+    const sections =
+      document.querySelectorAll("section[id]");
+
+
+    const observer =
+      new IntersectionObserver(
+
+        entries => {
+
+          entries.forEach(entry => {
+
+            if(entry.isIntersecting){
+
+              sideLinks.forEach(link => {
+
+                link.classList.remove("active");
+
+              });
+
+
+              const activeLink =
+                document.querySelector(
+                  `.side-link[href="#${entry.target.id}"]`
+                );
+
+
+              if(activeLink){
+
+                activeLink.classList.add("active");
+
+              }
+
+            }
+
+          });
+
+        },
+
+        {
+          rootMargin:"-20% 0px -65% 0px",
+          threshold:0
+        }
+
+      );
+
+
+    sections.forEach(section => {
+
+      observer.observe(section);
+
+    });
+
+
+    /*
+     * Update mobile menu label.
+     */
+
+    function updateMenuLabel(){
+
+      if(window.innerWidth > 900){
+
+        return;
+
+      }
+
+
+      const active =
+        document.querySelector(".side-link.active");
+
+
+      if(active){
+
+        document.getElementById("menuLabel").textContent =
+          active.textContent;
+
+      }
+
+    }
+
+
+    sideLinks.forEach(link => {
+
+      link.addEventListener("click", () => {
+
+        setTimeout(updateMenuLabel,100);
+
+      });
+
+    });
+
+
+  </script>
+
+</body>
+</html>
