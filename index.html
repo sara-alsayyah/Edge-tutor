@@ -46,15 +46,37 @@ a:hover{text-decoration:underline}
 /* ============ nav ============ */
 header.top{position:sticky;top:0;z-index:60;background:rgba(11,23,41,.9);
   backdrop-filter:blur(12px);border-bottom:1px solid var(--soft)}
-.nav{display:flex;align-items:center;justify-content:space-between;gap: 10px;
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;
   max-width:1160px;margin:0 auto;padding:11px clamp(16px,3.4vw,40px)}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:20px;white-space:nowrap}
 .brand .bdot{width:28px;height:28px;border-radius:10px;display:grid;place-items:center;
   background:linear-gradient(135deg,var(--amber),var(--coral));color:var(--night)}
-.nav nav{display:flex;gap:10px;flex:1;flex-wrap:nowrap;justify-content:center;margin-left:40px}
+.nav nav{display:flex;gap:10px;flex:1;flex-wrap:nowrap;justify-content:space-between;margin-left:40px}
 .nav nav a{font-size:13.5px;font-weight:700;color:var(--dim);padding:7px 13px;border-radius:999px;transition:.18s;white-space:nowrap}
 .nav nav a:hover{color:var(--ink);background:var(--panel);text-decoration:none}
-@media(max-width:1000px){.nav nav{display:none}}
+
+.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;
+  gap:5px;width:40px;height:40px;background:none;border:none;cursor:pointer;padding:0;flex:none}
+.hamburger span{display:block;width:22px;height:2.4px;border-radius:2px;background:var(--ink);
+  transition:transform .25s ease,opacity .2s ease}
+.hamburger[aria-expanded="true"] span:nth-child(1){transform:translateY(7.4px) rotate(45deg)}
+.hamburger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.hamburger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7.4px) rotate(-45deg)}
+
+@media(max-width:1000px){
+  .hamburger{display:flex}
+  .nav nav{
+    display:flex;flex-direction:column;align-items:stretch;gap:0;flex:none;margin-left:0;
+    position:absolute;top:100%;left:0;right:0;
+    background:var(--night2);border-bottom:1px solid var(--soft);
+    box-shadow:0 18px 30px rgba(0,0,0,.4);
+    max-height:0;overflow:hidden;opacity:0;
+    transition:max-height .3s ease,opacity .25s ease;
+  }
+  .nav nav.open{max-height:420px;opacity:1}
+  .nav nav a{padding:15px clamp(16px,3.4vw,40px);border-radius:0;width:100%}
+  .nav nav a:hover{background:var(--panel)}
+}
 
 /* ============ sections ============ */
 section{padding:clamp(56px,7vw,92px) 0}
@@ -79,7 +101,7 @@ p{margin:0 0 16px;max-width:68ch}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
 .bubble{position:relative;background:var(--panel);border:2px solid var(--line);
   border-radius:20px 20px 20px 7px;padding:13px 19px;font-size:clamp(15px,1.4vw,17.5px);
-  font-weight:700;max-width:52ch;margin-bottom:152px}
+  font-weight:700;max-width:52ch;margin-bottom:12px}
 .bubble::after{content:"";position:absolute;left:-9px;bottom:11px;width:14px;height:14px;
   background:var(--panel);border-left:2px solid var(--line);border-bottom:2px solid var(--line);
   transform:rotate(45deg);border-radius:0 0 0 4px}
@@ -341,7 +363,10 @@ footer .maya{margin:0 auto 10px;animation:float 5.2s ease-in-out infinite}
 <header class="top">
   <div class="nav">
     <div class="brand"><span class="bdot"><svg class="icon sm"><use href="#i-spark"/></svg></span> Edge Tutor</div>
-    <nav>
+    <button class="hamburger" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="mainNav">
       <a href="#idea">Home</a>
       <a href="#hardware">How It Works</a>
       <a href="#experiment">Demo / Workflow</a>
@@ -826,6 +851,19 @@ footer .maya{margin:0 auto 10px;animation:float 5.2s ease-in-out infinite}
     es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
   },{threshold:0, rootMargin:'0px 0px -60px 0px'});
   document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+
+  var btn = document.getElementById('navToggle');
+  var nav = document.getElementById('mainNav');
+  function closeMenu(){ nav.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
+  function openMenu(){ nav.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+  btn.addEventListener('click', function(){
+    nav.classList.contains('open') ? closeMenu() : openMenu();
+  });
+  nav.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeMenu); });
+  document.addEventListener('click', function(e){
+    if(nav.classList.contains('open') && !nav.contains(e.target) && e.target!==btn && !btn.contains(e.target)) closeMenu();
+  });
+  window.addEventListener('resize', function(){ if(window.innerWidth>1000) closeMenu(); });
 })();
 </script>
 </body>
