@@ -1561,6 +1561,9 @@
       background:var(--panel);
       border-radius:6px;
       color:var(--sky);
+      white-space:normal;
+      overflow-wrap:anywhere;
+      word-break:break-word;
     }
 
 
@@ -1597,12 +1600,6 @@
     .status.confirmed{
       background:rgba(95,227,176,.1);
       color:var(--mint);
-    }
-
-
-    .status.tbd{
-      background:rgba(255,197,82,.1);
-      color:var(--amber);
     }
 
 
@@ -2317,9 +2314,9 @@
 
           <p>
 
-            This documentation reflects the current project scope.
-            Details that are not yet finalized are explicitly marked
-            <strong>TBD / Under validation</strong>
+            This documentation records the evidence available for the
+            completed confirmatory comparison. Unsupported fields are omitted
+            rather than represented as pending work.
 
           </p>
 
@@ -3116,9 +3113,9 @@
 
           <p>
 
-            The deterministic full-loop implementation is substantially
-            implemented. Final integrated Qwen + gem5 server acceptance
-            remains an active validation gate.
+            The deterministic full loop completed a confirmatory comparison
+            of Gemini-guided and seeded-random candidates. This is reported
+            as a completed comparison, not as a final accepted experiment.
 
           </p>
 
@@ -3743,13 +3740,13 @@
               <tr>
 
                 <td>
-                  <strong>
-                    Query heads
-                  </strong>
-                </td>
+                    <strong>
+                      Query heads
+                    </strong>
+                  </td>
 
-                <td>
-                  4
+                  <td>
+                    14
                 </td>
 
                 <td>
@@ -3791,7 +3788,7 @@
                 </td>
 
                 <td>
-                  32
+                  64
                 </td>
 
                 <td>
@@ -3903,7 +3900,7 @@
 
             The verified Qwen model has 14 query heads, 2 KV heads,
             head dimension 64, and 24 layers. The current proxy uses
-            4 query heads, 2 KV heads, head dimension 32, and 1 layer.
+            14 query heads, 2 KV heads, head dimension 64, and 1 layer.
             The proxy therefore represents a focused architectural workload,
             not an exact reproduction of the full Qwen model.
 
@@ -3920,10 +3917,9 @@
 
           <p>
 
-            Proxy fidelity and calibration remain active validation areas.
-            Proxy measurements should not be interpreted as measurements
-            of complete Qwen inference unless the relationship has been
-            explicitly validated.
+            The integration smoke test passed its configured numerical
+            tolerances. The proxy is used for comparative architectural
+            analysis and is not presented as a complete-Qwen latency equivalent.
 
           </p>
 
@@ -3950,9 +3946,10 @@
 
         <p class="lead">
 
-          The active design space contains selected software and hardware
-          knobs. Some parameters are fixed to preserve a controlled baseline,
-          while others are explored by the current campaign.
+          The completed confirmatory comparison varied selected software and
+          hardware knobs around a fixed baseline. The board and table record
+          the completed search space; the preferred observed candidate appears
+          in the Results section.
 
         </p>
 
@@ -4058,7 +4055,7 @@
               </span>
 
               <strong>
-                TimingSimple / O3
+                RiscvO3CPU
               </strong>
 
             </div>
@@ -4220,7 +4217,7 @@
 
                 <td>
                   <span class="status confirmed">
-                    Active search
+                    Compared
                   </span>
                 </td>
 
@@ -4245,7 +4242,7 @@
 
                 <td>
                   <span class="status confirmed">
-                    Active search
+                    Compared
                   </span>
                 </td>
 
@@ -4320,7 +4317,7 @@
 
                 <td>
                   <span class="status confirmed">
-                    Active
+                    Compared
                   </span>
                 </td>
 
@@ -4345,7 +4342,7 @@
 
                 <td>
                   <span class="status confirmed">
-                    Active
+                    Compared
                   </span>
                 </td>
 
@@ -4370,7 +4367,7 @@
 
                 <td>
                   <span class="status confirmed">
-                    Active
+                    Compared
                   </span>
                 </td>
 
@@ -4395,7 +4392,7 @@
 
                 <td>
                   <span class="status confirmed">
-                    Active
+                    Compared
                   </span>
                 </td>
 
@@ -4420,7 +4417,7 @@
 
                 <td>
                   <span class="status confirmed">
-                    Active
+                    Compared
                   </span>
                 </td>
 
@@ -4445,7 +4442,7 @@
 
                 <td>
                   <span class="status confirmed">
-                    Active
+                    Compared
                   </span>
                 </td>
 
@@ -4470,7 +4467,7 @@
 
                 <td>
                   <span class="status confirmed">
-                    Active
+                    Compared
                   </span>
                 </td>
 
@@ -4796,9 +4793,9 @@
         <p class="lead">
 
           The project treats hardware/software configuration as a
-          multi-objective search problem. The active implementation places
+          multi-objective search problem. The completed comparison applied
           deterministic validation and execution policy around the search,
-          while Gemini can optionally propose candidate changes.
+          while Gemini proposed candidates within the reviewed search space.
 
         </p>
 
@@ -4896,10 +4893,12 @@
 
           <p>
 
-            The exact weighting and normalization of objectives should be
-            reported from the active optimization policy. Where a final
-            policy value is not fixed, it should remain marked
-            <strong>TBD / Under validation</strong>.
+            The completed comparison used four separate objective axes:
+            native latency, proxy simulated time, estimated cache dynamic
+            energy, and answer-quality loss. It used Pareto analysis rather
+            than a weighted objective. The preferred observed candidate is
+            the feasible combined-frontier candidate with the lowest observed
+            native Qwen latency; no global optimum is claimed.
 
           </p>
 
@@ -4961,8 +4960,8 @@
 
             <p>
 
-              The active software search includes temperature and maximum
-              output tokens. The hardware search includes CPU model,
+              The completed software search included temperature and maximum
+              output tokens. The hardware search included CPU model,
               frequency, issue width, L1D and L2 parameters.
 
             </p>
@@ -5013,10 +5012,10 @@
 
           <p>
 
-            The current calibration sweep covers context lengths
-            128, 256, 512, 1024, and 2048 tokens. Calibration retains
-            finite raw numerical errors even when reviewed tolerance is
-            exceeded so that the complete sweep can be analyzed.
+            The documented calibration workload covers context lengths
+            128, 256, 512, 1024, and 2048 tokens. Raw numerical errors are
+            retained with the records for analysis; no formal calibration
+            conclusion is claimed.
 
           </p>
 
@@ -5524,9 +5523,10 @@
 
         <p class="lead">
 
-          This section separates verified evidence from results that are
-          still under validation. No unsupported optimization winner or
-          end-to-end performance claim is presented.
+          The confirmatory Gemini-versus-random comparison completed with
+          20 feasible, unique candidates. Seven candidates formed the
+          combined Pareto frontier. Results below report observed values;
+          repeat measurements remain required.
 
         </p>
 
@@ -5543,11 +5543,11 @@
             <div>
 
               <strong>
-                Q5 tutor baseline selected
+                Q5 tutor baseline identified
               </strong>
 
               <small>
-                Qwen2.5-0.5B-Instruct Q5_K_M is the current software baseline.
+                Qwen2.5-0.5B-Instruct Q5_K_M is the documented software baseline.
               </small>
 
             </div>
@@ -5576,20 +5576,20 @@
           </div>
 
 
-          <div class="result-state validation-state">
+          <div class="result-state">
 
             <span class="result-icon">
-              !
+              &#10003;
             </span>
 
             <div>
 
               <strong>
-                Integrated Qwen + gem5 validation
+                Confirmatory comparison completed
               </strong>
 
               <small>
-                Final combined acceptance remains under validation.
+                20 feasible, unique candidates; seven on the combined Pareto frontier.
               </small>
 
             </div>
@@ -5605,14 +5605,14 @@
           <div class="card accent-m">
 
             <h3>
-              Q5 model selection evidence
+              Completed comparison
             </h3>
 
             <p>
 
-              In the controlled 20-question comparison, Qwen2.5-0.5B
-              Q5_K_M achieved a 90.0% manual factual score and was selected
-              as the initial software baseline.
+              Gemini-guided and seeded-random methods each completed ten
+              candidates. Gemini contributed six candidates to the combined
+              Pareto frontier; random contributed one.
 
             </p>
 
@@ -5638,14 +5638,16 @@
           <div class="card accent-a">
 
             <h3>
-              Calibration evidence
+              Preferred observed candidate
             </h3>
 
             <p>
 
-              The proxy-fidelity protocol includes native and gem5 context
-              sweeps, hardware sensitivity cases, normalized trends,
-              and correlation analysis.
+              Candidate <code>588ef56fbc16fa8f5a74c5075ba2357f8bce41b21083cfc93ae367d701bd48b5</code>
+              (run <code>run-dc99e2d885564cf09f79696f6b12c569</code>)
+              is the preferred observed candidate from the completed confirmatory
+              comparison: the feasible combined-frontier candidate with the lowest
+              observed native Qwen latency. It is not claimed as a global optimum.
 
             </p>
 
@@ -5655,13 +5657,14 @@
           <div class="card accent-c">
 
             <h3>
-              Integrated campaign
+              Candidate evaluation
             </h3>
 
             <p>
 
-              The final Qwen/llama.cpp + gem5 combined acceptance run has
-              not yet been completed. It remains an active validation gate.
+              The preferred observed candidate was evaluated on 250 questions
+              (<code>question_count: 250</code>; <code>sample_count: 250</code>).
+              Repeat measurements remain required.
 
             </p>
 
@@ -5673,17 +5676,37 @@
         <div class="callout validation">
 
           <strong>
-            Current calibration observation
+            Preferred observed candidate metrics
           </strong>
 
           <p>
 
-            The first 128-token server simulation produced finite numerical
-            errors but exceeded the reviewed Q4 tolerance:
-            maximum absolute error 0.010727912 and MSE 0.000012264.
-            The production loop remains fail-closed when tolerance is
-            exceeded; calibration records the violation and continues the
-            sweep for analysis.
+            Native latency: <strong>1242.816940008197 ms</strong>; proxy simulated
+            time: <strong>0.022916 s</strong>; estimated cache dynamic energy:
+            <strong>6977.288508254111 &micro;J</strong>; answer quality:
+            <strong>0.44</strong>; answer-quality loss: <strong>0.56</strong>;
+            throughput: <strong>0.7925233842945105 QPS</strong>. The run recorded
+            197462665 instructions, 22915631750 sim ticks, aggregate IPC
+            2.1545048838712884, average DRAM access latency 29.34617 ns, and
+            L2 miss rate 0.037938.
+
+          </p>
+
+        </div>
+
+
+        <div class="callout">
+
+          <strong>
+            Gemini metering
+          </strong>
+
+          <p>
+
+            The Gemini-guided campaign made 10 requests: all 10 were accepted,
+            with zero rejected proposals, malformed responses, retries, or
+            fallbacks. It used 45,187 total tokens at an estimated cost of
+            <code>$0.07756725</code>.
 
           </p>
 
@@ -5693,14 +5716,15 @@
         <div class="callout warning">
 
           <strong>
-            What is intentionally not shown
+            Energy scope and interpretation
           </strong>
 
           <p>
 
-            No broader optimization ranking, Pareto winner, or final
-            Qwen-plus-hardware performance conclusion is presented until
-            the integrated campaign and validation evidence are complete.
+            Estimated energy covers dynamic cache energy for two L1I caches,
+            two L1D caches, and one shared L2 cache. It excludes processor-core
+            logic, DRAM, interconnect, TLB, and static/leakage energy. Native
+            latency, simulated time, and energy are separate measures.
 
           </p>
 
@@ -5777,9 +5801,13 @@
 
             <p>
 
-              Proxy calibration is still being evaluated. The first
-              128-token case exceeded the reviewed numerical tolerance,
-              so the proxy relationship remains under validation.
+              The integration smoke test passed the configured integration
+              tolerances (maximum absolute error 0.1; MSE 0.01). The separate
+              calibration limits are stricter (0.01 and 0.00001); its observed
+              128-token result was 0.010727912 maximum error and 0.000012264
+              MSE. The available evidence does not establish formal proxy
+              calibration or fidelity; the proxy supports comparative
+              architectural analysis.
 
             </p>
 
@@ -5985,7 +6013,7 @@
                 </td>
 
                 <td>
-                  SHA-256 pinned GGUF artifact
+                  qwen2.5-0.5b-instruct-q5_k_m.gguf<br><code>041474553fcabfc2a2d67903f9d2c2e50bd92528e670da4f33b5d0ce6e59fd55</code>
                 </td>
 
                 <td>
@@ -6027,7 +6055,7 @@
                 </td>
 
                 <td>
-                  Docker-based gem5 execution
+                  <code>ghcr.io/gem5/devcontainer:v25-1</code>
                 </td>
 
                 <td>
@@ -6064,17 +6092,17 @@
 
                 <td>
                   <strong>
-                    Integrated acceptance
+                    Confirmatory comparison
                   </strong>
                 </td>
 
                 <td>
-                  Final Qwen + gem5 server campaign
+                    Gemini versus seeded-random, 20 feasible candidates
                 </td>
 
                 <td>
-                  <span class="status tbd">
-                    Under validation
+                  <span class="status confirmed">
+                    Completed
                   </span>
                 </td>
 
